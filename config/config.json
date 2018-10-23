@@ -1,6 +1,6 @@
 {
   "test": {},
-  "development": {
+  "dev": {
     "LOG_LEVEL_ENGINE": "debug",
     "LOG_FILE_ENGINE": "engine.log",
     "NUM_PARTITIONS": 10
