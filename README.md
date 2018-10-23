@@ -15,3 +15,10 @@ HEARTH_BEAT_FREQUENCY: The frequency with which a hearth beat is performed by a 
 HEARTH_BEAT_CHECK_FREQUENCY: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
 LOG_LEVEL: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.
 
+
+<h2>TODO List </h2>
+partitions <br>
+unit tests <br>
+Improve docs with UML and dynamic system behaviour <br>
+Monitoring ring status with REST API<br>
+Retry seed reconnection <br>
