@@ -3,8 +3,8 @@
 Distributed algorithm implemented in order to make easy data partitioning and resolve problems as concurrency.<br>
 The algorithm will assign to each node one or more partitions to work with.<br>
 A node will be removed if it does not send an hearth beat for a while , this process is called heart check.<br>
-Each node in the ring will have an ID and a priority , if the leader node will die <br>
-The node with lower priority will be elect as leader.
+Each node in the ring will have an ID and a priority , if the leader node will die the node with lower priority will be elect as leader.
+
 
 <h2> Configuration </h2>
  PORT : The leader will start to listen of this port , default is 3000 <br>
