@@ -1,0 +1,41 @@
+{
+  "name": "ring-election",
+  "version": "0.0.1",
+  "description": "Leader and followers algorithm to make partitioning easy.",
+  "main": "ring/server.js",
+  "engines": {
+    "node": ">=10.0.0",
+    "npm": ">=6.0.0"
+  },
+  "keywords": [
+    "scheduler"
+  ],
+  "scripts": {
+    "start-leader": "node ring/start.js",
+    "test": "NODE_ENV=test REPORTER=tap mocha --timeout 5000 **/*test.js",
+    "demontest": "nodemon --exec \"npm test\"",
+    "coverage": "REPORTER=tap nyc mocha  --timeout 5000 **/*test.js"
+  },
+  "author": "pioardi",
+  "license": "ISC",
+  "dependencies": {
+    "@reactivex/rxjs": "^5.5.11",
+    "compression": "^1.7.2",
+    "esm": "^3.0.55",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
+    "mongoose": "^4.13.8",
+    "node-cron": "^1.2.1",
+    "node-rest-client": "^3.1.0",
+    "opentracing": "^0.14.3",
+    "validator": "^10.4.0",
+    "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "expect": "^1.20.2",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2",
+    "supertest": "^3.1.0"
+  }
+}
