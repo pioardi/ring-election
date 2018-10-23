@@ -24,13 +24,7 @@ const util = require('./util');
 const hearthbeatCheck = require('./hearthcheck');
 const Rx = require('@reactivex/rxjs');
 
-// TODO list
-// partitions
-// unit tests.
-// clean code
-// documentation.
-// monitoring.
-// Retry seed node reconnection.
+
 // --------------------- CONSTANTS ---------------------
 const {NODE_ADDED,NODE_REMOVED,HEARTH_BEAT,WELCOME,HOSTNAME,MESSAGE_SEPARATOR} = require('./constants'); 
 // --------------------- CONSTANTS --------------------- 
