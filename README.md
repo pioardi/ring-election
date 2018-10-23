@@ -1,7 +1,6 @@
 # Ring partitioner
 <h2>Overview and rationale</h2>
-In modern systems, data partitioning is often guaranteed by a distributed database (for example, cassandra),<br>
-but often it is also needed to distribute the application load to make the system scalable so that every data is processed by a single instance. <br>
+In modern systems, data partitioning is often guaranteed by a distributed database (for example, cassandra),but often it is also needed to distribute the application load to make the system scalable so that every data is processed by a single instance. <br>
 Ring-election is a distributed algorithm implemented in order to make easy data partitioning and resolve problems as concurrency.<br>
 The algorithm will assign to each node one or more partitions to work with.<br>
 A node will be removed if it does not send an hearth beat for a while , this process is called heart check.<br>
