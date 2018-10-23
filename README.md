@@ -21,4 +21,4 @@ partitions <br>
 unit tests <br>
 Improve docs with UML and dynamic system behaviour <br>
 Monitoring ring status with REST API<br>
-Retry seed reconnection <br>
+Retry leader reconnection <br>
