@@ -1,6 +1,6 @@
 # Ring partitioner
 <h2>Overview and rationale</h2>
-Distributed algorithm implemented in order to make easy data partitioning and resolve problem as concurrency.<br>
+Distributed algorithm implemented in order to make easy data partitioning and resolve problems as concurrency.<br>
 The algorithm will assign to each node one or more partitions to work with.<br>
 A node will be removed if it does not send an hearth beat for a while , this process is called heart check.<br>
 Each node in the ring will have an ID and a priority , if the leader node will die <br>
