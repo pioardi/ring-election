@@ -9,9 +9,16 @@ Each node in the ring will have an ID and a priority , if the leader node will d
 
 
 <h2> Configuration </h2>
- PORT : The leader will start to listen of this port , default is 3000 <br>
+ PORT : The leader will start to listen on this port , default is 3000 <br>
  TIME_TO_RECONNECT: The time to wait for a follower when he has to connect to a new leader in ms , default is 3000 <br>
 HEARTH_BEAT_FREQUENCY: The frequency with which a hearth beat is performed by a follower , default is 1000 <br>
 HEARTH_BEAT_CHECK_FREQUENCY: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
 LOG_LEVEL: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.
 
+
+<h2>TODO List </h2>
+partitions <br>
+unit tests <br>
+Improve docs with UML and dynamic system behaviour <br>
+Monitoring ring status with REST API<br>
+Retry leader reconnection <br>
