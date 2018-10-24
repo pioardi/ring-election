@@ -22,3 +22,6 @@ unit tests <br>
 Improve docs with UML and dynamic system behaviour <br>
 Monitoring ring status with REST API<br>
 Retry leader reconnection <br>
+
+
+![Dynamic diagram](doc/Ring.jpg)
