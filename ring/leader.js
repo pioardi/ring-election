@@ -61,14 +61,7 @@ let createServer = () => {
 
 
 let clientDisconnected = (client) => {
-  let entry = util.searchClient(client,servers);
-  log.debug(`Client disconnected ${entry[0].hostname}`);
-  servers.delete(entry[0]);
-  let indexToRemove = addresses.findIndex(e=> e.id == entry[0].id);
-  addresses.splice(indexToRemove,1);
-  addresses.filter(e => e.priority > 1).forEach(e => e.priority--);
-  partitioner.assignPartitions(client,servers);
-  // TODO should rebalance the partitions.
+  partitioner.rebalancePartitions(client,servers,addresses);
   // Inform other nodes that one is removed.
   broadcastMessage({type : NODE_REMOVED , msg: addresses })
 }

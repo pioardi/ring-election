@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 const Rx = require('@reactivex/rxjs');
 const log = require('./logger');
+const util = require('./util');
 
 
 /**
@@ -24,6 +25,7 @@ let defaultPartitioner = (data) => {
  * Assign all partitions to one node.
  * @param {*} numberOfPartitions 
  * @param {*} partitionsAssigned 
+ * @private
  */
 function assignAllPartitions(numberOfPartitions, partitionsAssigned) {
   for (var i = 0; i < numberOfPartitions; i++) {
@@ -32,10 +34,37 @@ function assignAllPartitions(numberOfPartitions, partitionsAssigned) {
 }
 
 /**
+ * Update servers data structure assigning the partitions to revoke to nodes.
+ * @param {*} servers 
+ * @param {*} partitionsToAssignForEachNode 
+ * @param {*} partitionsToRevoke 
+ * @private
+ */
+function updateServers(servers, addresses ,partitionsToAssignForEachNode, partitionsToRevoke) {
+  Rx.Observable.from(servers)
+    .map((entry, index) => {
+      for (let i = 0; i < partitionsToAssignForEachNode; i++) {
+        let assignedPartition = partitionsToRevoke[partitionsToRevoke.length - 1];
+        log.info(`Assigned partition number ${assignedPartition} to node ${entry[0].hostname}`);
+        entry[1].partitions.push(partitionsToRevoke.pop());
+      }
+      // update addresses
+      let i = addresses.findIndex(e => e.id == entry[0].id);
+      if(i >= 0){
+        addresses[i].partitions = entry[1].partitions;
+      }
+      return entry;
+    })
+    .subscribe();
+}
+
+/**
  * Reassign partitions across the cluster.
  * @param {*} client client added or removed.
  * @param {*} hostname hostname of client.
  * @param {*} servers all servers in the cluster.
+ * @returns the partitions assigned.
+ * @public
  */
 let assignPartitions = (client,servers) => {
   let partitionsAssigned = [];
@@ -55,7 +84,35 @@ let assignPartitions = (client,servers) => {
   return partitionsAssigned;
 };
 
+/**
+ * Revoke partitions assigned to client and split them to other nodes.
+ * @param {*} client the client removed from the cluster.
+ * @param {*} servers all servers in the cluster.
+ * @param {*} addresses servers in the cluster.
+ * @public
+ * 
+ */
+let rebalancePartitions = (client,servers,addresses) => {
+  let entry = util.searchClient(client,servers);
+  // save partitions
+  let partitionsToRevoke = entry[1].partitions;
+  log.debug(`Client disconnected ${entry[0].hostname}`);
+  // clean data structures
+  servers.delete(entry[0]);
+  let indexToRemove = addresses.findIndex(e=> e.id == entry[0].id);
+  addresses.splice(indexToRemove,1);
+  addresses.filter(e => e.priority > 1).forEach(e => e.priority--);
+  let partitionsToAssignForEachNode = Math.round(partitionsToRevoke.length / servers.size);
+  updateServers(servers, addresses ,  partitionsToAssignForEachNode, partitionsToRevoke);
+};
 
+/**
+ * 
+ * @param {*} entry 
+ * @param {*} index 
+ * @param {*} partitionsToRevokeForEachNode 
+ * @private
+ */
 let revokePartitions = (entry, index,partitionsToRevokeForEachNode) => {
   return Rx.Observable.create((observer) => {
     for(let i = 0 ; i < partitionsToRevokeForEachNode ; i++ ){
@@ -70,5 +127,8 @@ let revokePartitions = (entry, index,partitionsToRevokeForEachNode) => {
 
 module.exports = {
   defaultPartitioner : defaultPartitioner,
-  assignPartitions : assignPartitions
+  assignPartitions : assignPartitions,
+  rebalancePartitions: rebalancePartitions
 }
+
+
