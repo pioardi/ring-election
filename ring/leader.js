@@ -10,8 +10,6 @@ const partitioner = require('./partitioner');
 /* This config is helpful for development and test ,in production 
 * will be used environment variables 
 */
-let os = require('os');
-let hostname = os.hostname();
 let config = require('../config/config.js');
 let configObject = require('../config/config.json');
 config(configObject);
@@ -69,7 +67,7 @@ let clientDisconnected = (client) => {
   let indexToRemove = addresses.findIndex(e=> e.id == entry[0].id);
   addresses.splice(indexToRemove,1);
   addresses.filter(e => e.priority > 1).forEach(e => e.priority--);
-  // TODO should update priority on servers.
+  partitioner.assignPartitions(client,servers);
   // TODO should rebalance the partitions.
   // Inform other nodes that one is removed.
   broadcastMessage({type : NODE_REMOVED , msg: addresses })
@@ -106,14 +104,14 @@ let peerMessageHandler = (data, client) => {
 let clientHostname = (client, hostname) => {
   let cliendId = generateID();
   let priority = addresses.length + 1;
-  let assignedPartitions = partitioner.assignPartitions(client, hostname, servers);
+  let assignedPartitions = partitioner.assignPartitions(client, servers);
   servers.set({ client: client, id: cliendId, hostname: hostname }, { priority: priority, partitions: assignedPartitions });
   hearth.set(cliendId, Date.now());
-  let welcome = { type: WELCOME, msg: addresses, id: cliendId, priority: priority }
+  addresses.push({ client: client , address: hostname, port: client.localPort, id: cliendId, partitions: assignedPartitions, priority: priority });
+  let welcome = { type: WELCOME, msg: addresses, id: cliendId, priority: priority , partitions: assignedPartitions};
   // sent ring info to the new peer.
   client.write(JSON.stringify(welcome) + MESSAGE_SEPARATOR);
   broadcastMessage({type : NODE_ADDED , msg : addresses});
-  addresses.push({ client: client , address: hostname, port: client.localPort, id: cliendId, partitions: assignedPartitions, priority: priority });
   
 }
 

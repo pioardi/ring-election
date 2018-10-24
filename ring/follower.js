@@ -27,6 +27,8 @@ const ring = require('./leader');
 var id;
 // priority to be elegible to be a seed node.
 var priority;
+// Assigned partitions
+var assignedPartitions = [];
 
 
 // --------------------- CONSTANTS ---------------------
@@ -80,19 +82,32 @@ let peerMessageHandler = (data, client) => {
       id = jsonData.id;
       priority = jsonData.priority;
       log.info(`Id in the ring ${id} , priority in the ring ${priority}`);
+      log.info(`Assigned partitions : ${jsonData.partitions}`);
+      assignedPartitions = jsonData.partitions;
       hearthbeat(client, id);
     } else if (type === NODE_ADDED) {
       log.info('New node added in the cluster');
       addresses = msg;
+      updatePartitionAssigned();
     } else if (type === NODE_REMOVED) {
       priority--;
       log.info(`A node was removed from the cluster , now my priority is ${priority}`);
       addresses = msg;
+      updatePartitionAssigned();
     }
     // handle all types of messages.
   })
 }
 
+
+let updatePartitionAssigned = () => {
+  Rx.Observable.from(addresses)
+               .find(a => a.id == id)
+               .subscribe((e)=> {
+                 assignedPartitions = e.partitions;
+               })
+  log.info(`New partitions assigned ${assignedPartitions}`);
+};
 
 /**
  * Seed node dead , search new seed node and connect to it.
