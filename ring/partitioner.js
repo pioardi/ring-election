@@ -68,7 +68,7 @@ function updateServers(servers, addresses ,partitionsToAssignForEachNode, partit
  */
 let assignPartitions = (client,servers) => {
   let partitionsAssigned = [];
-  let numberOfPartitions = process.env.NUM_PARTITIONS;
+  let numberOfPartitions = process.env.NUM_PARTITIONS || 10;
   let numberOfNodes = servers.size;
   let partitionsToAssign = Math.round(numberOfPartitions / (numberOfNodes + 1));
   let partitionsToRevokeForEachNode = Math.round(partitionsToAssign / numberOfNodes);
@@ -87,23 +87,25 @@ let assignPartitions = (client,servers) => {
 /**
  * Revoke partitions assigned to client and split them to other nodes.
  * @param {*} client the client removed from the cluster.
- * @param {*} servers all servers in the cluster.
- * @param {*} addresses servers in the cluster.
+ * @param {Map} servers all servers in the cluster.
+ * @param {Array} addresses servers in the cluster , optional.
  * @public
  * 
  */
 let rebalancePartitions = (client,servers,addresses) => {
   let entry = util.searchClient(client,servers);
-  // save partitions
-  let partitionsToRevoke = entry[1].partitions;
-  log.debug(`Client disconnected ${entry[0].hostname}`);
-  // clean data structures
-  servers.delete(entry[0]);
-  let indexToRemove = addresses.findIndex(e=> e.id == entry[0].id);
-  addresses.splice(indexToRemove,1);
-  addresses.filter(e => e.priority > 1).forEach(e => e.priority--);
-  let partitionsToAssignForEachNode = Math.round(partitionsToRevoke.length / servers.size);
-  updateServers(servers, addresses ,  partitionsToAssignForEachNode, partitionsToRevoke);
+  if(entry){
+    // save partitions
+    let partitionsToRevoke = entry[1].partitions;
+    log.debug(`Client disconnected ${entry[0].hostname}`);
+    // clean data structures
+    servers.delete(entry[0]);
+    let indexToRemove = addresses.findIndex(e=> e.id == entry[0].id);
+    addresses.splice(indexToRemove,1);
+    addresses.filter(e => e.priority > 1).forEach(e => e.priority--);
+    let partitionsToAssignForEachNode = Math.round(partitionsToRevoke.length / servers.size);
+    updateServers(servers, addresses ,  partitionsToAssignForEachNode, partitionsToRevoke);
+  }
 };
 
 /**

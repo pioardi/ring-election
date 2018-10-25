@@ -11,9 +11,6 @@
 */
 let os = require('os');
 let hostname = os.hostname();
-let config = require('../config/config.js');
-let configObject = require('../config/config.json');
-config(configObject);
 let log = require('./logger');
 let peerPort = process.env.PORT || 3000;
 // --------------------- CONFIG --------------------- 
@@ -90,7 +87,8 @@ let peerMessageHandler = (data, client) => {
       addresses = msg;
       updatePartitionAssigned();
     } else if (type === NODE_REMOVED) {
-      priority--;
+      if(priority > 1 )
+        priority--;
       log.info(`A node was removed from the cluster , now my priority is ${priority}`);
       addresses = msg;
       updatePartitionAssigned();

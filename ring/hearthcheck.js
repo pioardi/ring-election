@@ -11,28 +11,33 @@ const Rx = require('@reactivex/rxjs');
 const maxInactiveTime = process.env.MAX_INACTIVE_TIME || 10000;
 /** frequency to check if nodes are alive(in ms) */
 const hearthbeatCheckFrequency = process.env.HEARTH_BEAT_CHECK_FREQUENCY || 3000;
+const partitioner = require('./partitioner');
+const util = require('./util');
+const { NODE_REMOVED } = require('./constants');
 // --------------------- HEARTH --------------------- 
 /**
  * Check if some node is dead.
  */
-let hearthbeatCheckLogic = function (hearth, servers) {
+let hearthbeatCheckLogic = function (hearth, servers, addresses) {
   if (hearth.size <= 0) {
     log.debug('No other nodes in the ring');
-    setTimeout(() => {
-      hearthbeatCheckLogic(hearth, servers);
-    }, hearthbeatCheckFrequency)
     return;
   }
   log.debug('Doing an hearth check');
   Rx.Observable.from(hearth)
     .filter(isNodeToRemove)
-    .map((entry, index) => removingNodes(entry, index, hearth, servers))
+    .map((entry, index) => removingNodes(entry, index, hearth, servers, addresses))
     .subscribe();
 }
 
-
-let hearthbeatCheck = function (hearth, servers) {
-  setInterval(()=> hearthbeatCheckLogic(hearth,servers),hearthbeatCheckFrequency);
+/**
+ * Start a periodic check to see if any node should be removed from the cluster.
+ * @param {Map} hearth 
+ * @param {Map} servers 
+ * @param {Array} addresses 
+ */
+let hearthbeatCheck = function (hearth, servers, addresses) {
+  setInterval(() => hearthbeatCheckLogic(hearth, servers, addresses), hearthbeatCheckFrequency);
 }
 
 
@@ -49,18 +54,16 @@ let isNodeToRemove = (entry, index) => {
  * @param {map entry} entry 
  * @param {* index into the map} index 
  */
-let removingNodes = (entry, index, hearth, servers) => {
+let removingNodes = (entry, index, hearth, servers, addresses) => {
   let removeFromHeart = [];
   log.info('Removing a node');
   // time expired , clean up maps.
   removeFromHeart.push(entry[0]);
-  let toRemove;
-  servers.forEach((value1, key1, map1) => {
-    if (key1.id === entry[0]) {
-      toRemove = key1;
-    }
-  });
-  servers.delete(toRemove);
+  let e = util.searchClientById(entry[0], servers);
+  // in case that a client is explicitly disconnected , the entry is already removed from the Map.
+  // rebalance partitions when a server is removed.
+  partitioner.rebalancePartitions(e[0].client, servers, addresses);
+  util.broadcastMessage(servers, { type: NODE_REMOVED, msg: addresses })
   removeFromHeart.forEach(e => {
     hearth.delete(e);
   })

@@ -7,12 +7,6 @@
 
 const partitioner = require('./partitioner');
 // --------------------- CONFIG --------------------- 
-/* This config is helpful for development and test ,in production 
-* will be used environment variables 
-*/
-let config = require('../config/config.js');
-let configObject = require('../config/config.json');
-config(configObject);
 let log = require('./logger');
 let peerPort = process.env.PORT || 3000;
 // --------------------- CONFIG --------------------- 
@@ -53,7 +47,7 @@ let createServer = () => {
     client.on('data', (data) => peerMessageHandler(data, client));
     // put client connection in the map , and assign partitions. 
   });
-  hearthbeatCheck(hearth, servers);
+  hearthbeatCheck(hearth, servers,addresses);
   server.listen(peerPort, function () {
     log.info('server is listening');
   });
@@ -61,9 +55,7 @@ let createServer = () => {
 
 
 let clientDisconnected = (client) => {
-  partitioner.rebalancePartitions(client,servers,addresses);
-  // Inform other nodes that one is removed.
-  broadcastMessage({type : NODE_REMOVED , msg: addresses })
+  log.info('A node is removed from the cluster , waiting heart check to rebalance partitions');
 }
 
 // --------------------- CORE --------------------- 
@@ -104,22 +96,10 @@ let clientHostname = (client, hostname) => {
   let welcome = { type: WELCOME, msg: addresses, id: cliendId, priority: priority , partitions: assignedPartitions};
   // sent ring info to the new peer.
   client.write(JSON.stringify(welcome) + MESSAGE_SEPARATOR);
-  broadcastMessage({type : NODE_ADDED , msg : addresses});
+  util.broadcastMessage(servers,{type : NODE_ADDED , msg : addresses});
   
 }
 
-
-/**
- * Broadcast message to each node.
- * @param {*} msg , message to sent in broadcast.
- */
-let broadcastMessage = (msg) => {
-  if (servers.size > 0) {
-    servers.forEach((value, key, map) => {
-      key.client.write(JSON.stringify(msg) + MESSAGE_SEPARATOR);
-    })
-  }
-}
 // --------------------- MESSAGING --------------------- 
 /**
  * Return an id to be associated to a node.
