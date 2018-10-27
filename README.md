@@ -3,7 +3,7 @@
 <h2>Contents</h2>
 <a href="#overview">Overview</a><br>
 <a href="#config">Config</a><br>
-<a href="#TODO">Vision</a><br>
+<a href="#todo">Vision</a><br>
 <a href="#hld">High level design</a><br>
 
 
@@ -26,7 +26,7 @@ Each node in the ring will have an ID and a priority , if the leader node will d
  NUM_PARTITIONS: Number of partitions to distribute across the cluster , default is 10.
 
 
-<h2 id="TODO">TODO List </h2>
+<h2 id="todo">TODO List </h2>
 unit tests <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
 Monitoring ring status with REST API<br>
