@@ -1,5 +1,14 @@
 # Ring election
-<h2>Overview and rationale</h2>
+
+<h2>Contents</h2>
+<a href="overview">Overview</a><br>
+<a href="config">Config</a><br>
+<a href="TODO">Vision</a><br>
+<a href="hld">High level design</a><br>
+
+
+
+<h2 id="overview">Overview and rationale</h2>
 In modern systems, data partitioning is often guaranteed by a distributed database (for example, cassandra),but often it is also needed to distribute the application load to make the system scalable so that every data is processed by a single instance. <br>
 Ring-election is a distributed algorithm implemented in order to make easy data partitioning and resolve problems as concurrency.<br>
 The algorithm will assign to each node one or more partitions to work with.<br>
@@ -8,7 +17,7 @@ Each node in the ring will have an ID and a priority , if the leader node will d
 
 
 
-<h2> Configuration </h2>
+<h2 id="config"> Configuration </h2>
  PORT : The leader will start to listen on this port , default is 3000 <br>
  TIME_TO_RECONNECT: The time to wait for a follower when he has to connect to a new leader in ms , default is 3000 <br>
  HEARTH_BEAT_FREQUENCY: The frequency with which a hearth beat is performed by a follower , default is 1000 <br>
@@ -17,12 +26,12 @@ Each node in the ring will have an ID and a priority , if the leader node will d
  NUM_PARTITIONS: Number of partitions to distribute across the cluster , default is 10.
 
 
-<h2>TODO List </h2>
+<h2 id="TODO">TODO List </h2>
 unit tests <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
 Monitoring ring status with REST API<br>
 Retry leader reconnection <br>
 
-<h2>High Level Diagram</h2>
+<h2 id="hld">High Level Diagram</h2>
 
 ![Dynamic diagram](doc/Ring.jpg)
