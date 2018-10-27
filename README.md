@@ -1,10 +1,10 @@
 # Ring election
 
 <h2>Contents</h2>
-<a href="overview">Overview</a><br>
-<a href="config">Config</a><br>
-<a href="TODO">Vision</a><br>
-<a href="hld">High level design</a><br>
+<a href="#overview">Overview</a><br>
+<a href="#config">Config</a><br>
+<a href="#TODO">Vision</a><br>
+<a href="#hld">High level design</a><br>
 
 
 
