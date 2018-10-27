@@ -22,8 +22,6 @@ const {NODE_ADDED,NODE_REMOVED,HEARTH_BEAT,WELCOME,HOSTNAME,MESSAGE_SEPARATOR} =
 // --------------------- CONSTANTS --------------------- 
 
 // --------------------- DS --------------------- 
-/** this will maintain an entry for each peer and will keep updated assigned partitions.*/
-var servers = new Map();
 /** mantain for each peer the last hearth beat. */
 let hearth = new Map();
 /** Used for reconnection when a seed node die. */
@@ -47,7 +45,7 @@ let createServer = () => {
     client.on('data', (data) => peerMessageHandler(data, client));
     // put client connection in the map , and assign partitions. 
   });
-  hearthbeatCheck(hearth, servers,addresses);
+  hearthbeatCheck(hearth,addresses);
   server.listen(peerPort, function () {
     log.info('server is listening');
   });
@@ -89,14 +87,13 @@ let peerMessageHandler = (data, client) => {
 let clientHostname = (client, hostname) => {
   let cliendId = generateID();
   let priority = addresses.length + 1;
-  let assignedPartitions = partitioner.assignPartitions(client, servers);
-  servers.set({ client: client, id: cliendId, hostname: hostname }, { priority: priority, partitions: assignedPartitions });
+  let assignedPartitions = partitioner.assignPartitions(client, addresses);
   hearth.set(cliendId, Date.now());
-  addresses.push({ client: client , address: hostname, port: client.localPort, id: cliendId, partitions: assignedPartitions, priority: priority });
+  addresses.push({ client: client , hostname: hostname, port: client.localPort, id: cliendId, partitions: assignedPartitions, priority: priority });
   let welcome = { type: WELCOME, msg: addresses, id: cliendId, priority: priority , partitions: assignedPartitions};
   // sent ring info to the new peer.
   client.write(JSON.stringify(welcome) + MESSAGE_SEPARATOR);
-  util.broadcastMessage(servers,{type : NODE_ADDED , msg : addresses});
+  util.broadcastMessage(addresses,{type : NODE_ADDED , msg : addresses});
   
 }
 

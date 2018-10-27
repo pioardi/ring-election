@@ -34,24 +34,24 @@ function assignAllPartitions(numberOfPartitions, partitionsAssigned) {
 }
 
 /**
- * Update servers data structure assigning the partitions to revoke to nodes.
- * @param {*} servers 
- * @param {*} partitionsToAssignForEachNode 
- * @param {*} partitionsToRevoke 
+ * Update data structures assigning the partitions to revoke to nodes.
+ * @param {Array} addresses 
+ * @param {Number} partitionsToAssignForEachNode 
+ * @param {Array} partitionsToRevoke 
  * @private
  */
-function updateServers(servers, addresses ,partitionsToAssignForEachNode, partitionsToRevoke) {
-  Rx.Observable.from(servers)
-    .map((entry, index) => {
+function updateServers(addresses ,partitionsToAssignForEachNode, partitionsToRevoke) {
+  Rx.Observable.from(addresses)
+    .map((entry) => {
       for (let i = 0; i < partitionsToAssignForEachNode; i++) {
         let assignedPartition = partitionsToRevoke[partitionsToRevoke.length - 1];
-        log.info(`Assigned partition number ${assignedPartition} to node ${entry[0].hostname}`);
-        entry[1].partitions.push(partitionsToRevoke.pop());
+        log.info(`Assigned partition number ${assignedPartition} to node ${entry.hostname}`);
+        entry.partitions.push(partitionsToRevoke.pop());
       }
       // update addresses
-      let i = addresses.findIndex(e => e.id == entry[0].id);
+      let i = addresses.findIndex(e => e.id == entry.id);
       if(i >= 0){
-        addresses[i].partitions = entry[1].partitions;
+        addresses[i].partitions = entry.partitions;
       }
       return entry;
     })
@@ -61,20 +61,19 @@ function updateServers(servers, addresses ,partitionsToAssignForEachNode, partit
 /**
  * Reassign partitions across the cluster.
  * @param {*} client client added or removed.
- * @param {*} hostname hostname of client.
- * @param {*} servers all servers in the cluster.
+ * @param {Array} addresses nodes in the cluster.
  * @returns the partitions assigned.
  * @public
  */
-let assignPartitions = (client,servers) => {
+let assignPartitions = (client,addresses) => {
   let partitionsAssigned = [];
   let numberOfPartitions = process.env.NUM_PARTITIONS || 10;
-  let numberOfNodes = servers.size;
+  let numberOfNodes = addresses.length;
   let partitionsToAssign = Math.round(numberOfPartitions / (numberOfNodes + 1));
   let partitionsToRevokeForEachNode = Math.round(partitionsToAssign / numberOfNodes);
-  if (servers.size > 0) {
-    Rx.Observable.from(servers)
-                 .flatMap((entry,index) => revokePartitions(entry,index,partitionsToRevokeForEachNode))
+  if (addresses.length > 0) {
+    Rx.Observable.from(addresses)
+                 .flatMap((entry) => revokePartitions(entry,partitionsToRevokeForEachNode))
                  .do(p=> partitionsAssigned.push(p))
                  .subscribe();
   } else {
@@ -87,40 +86,38 @@ let assignPartitions = (client,servers) => {
 /**
  * Revoke partitions assigned to client and split them to other nodes.
  * @param {*} client the client removed from the cluster.
- * @param {Map} servers all servers in the cluster.
- * @param {Array} addresses servers in the cluster , optional.
+ * @param {Array} addresses addresses in the cluster , optional.
  * @public
  * 
  */
-let rebalancePartitions = (client,servers,addresses) => {
-  let entry = util.searchClient(client,servers);
-  if(entry){
+let rebalancePartitions = (client,addresses) => {
+  let host = util.searchClient(client,addresses);
+  if(host){
     // save partitions
-    let partitionsToRevoke = entry[1].partitions;
-    log.debug(`Client disconnected ${entry[0].hostname}`);
+    let partitionsToRevoke = host.partitions;
+    log.debug(`Client disconnected ${host.hostname}`);
     // clean data structures
-    servers.delete(entry[0]);
-    let indexToRemove = addresses.findIndex(e=> e.id == entry[0].id);
+    let indexToRemove = addresses.findIndex(e=> e.id == host.id);
     addresses.splice(indexToRemove,1);
     addresses.filter(e => e.priority > 1).forEach(e => e.priority--);
-    let partitionsToAssignForEachNode = Math.round(partitionsToRevoke.length / servers.size);
-    updateServers(servers, addresses ,  partitionsToAssignForEachNode, partitionsToRevoke);
+    let partitionsToAssignForEachNode = Math.round(partitionsToRevoke.length / addresses.length);
+    updateServers(addresses ,  partitionsToAssignForEachNode, partitionsToRevoke);
   }
 };
 
 /**
  * 
- * @param {*} entry 
+ * @param {*} host 
  * @param {*} index 
  * @param {*} partitionsToRevokeForEachNode 
  * @private
  */
-let revokePartitions = (entry, index,partitionsToRevokeForEachNode) => {
+let revokePartitions = (host,partitionsToRevokeForEachNode) => {
   return Rx.Observable.create((observer) => {
     for(let i = 0 ; i < partitionsToRevokeForEachNode ; i++ ){
-      let partitions = entry[1].partitions;
+      let partitions = host.partitions;
       let revokedPartition = partitions[partitions.length - 1];
-      log.info(`Revoked partition number ${revokedPartition} to node ${entry[0].hostname}`);
+      log.info(`Revoked partition number ${revokedPartition} to node ${host.hostname}`);
       observer.next(partitions.pop())
     }
     observer.complete();

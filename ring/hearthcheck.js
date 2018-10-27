@@ -18,7 +18,7 @@ const { NODE_REMOVED } = require('./constants');
 /**
  * Check if some node is dead.
  */
-let hearthbeatCheckLogic = function (hearth, servers, addresses) {
+let hearthbeatCheckLogic = function (hearth, addresses) {
   if (hearth.size <= 0) {
     log.debug('No other nodes in the ring');
     return;
@@ -26,18 +26,17 @@ let hearthbeatCheckLogic = function (hearth, servers, addresses) {
   log.debug('Doing an hearth check');
   Rx.Observable.from(hearth)
     .filter(isNodeToRemove)
-    .map((entry, index) => removingNodes(entry, index, hearth, servers, addresses))
+    .map((entry, index) => removingNodes(entry, index, hearth, addresses))
     .subscribe();
 }
 
 /**
  * Start a periodic check to see if any node should be removed from the cluster.
  * @param {Map} hearth 
- * @param {Map} servers 
  * @param {Array} addresses 
  */
-let hearthbeatCheck = function (hearth, servers, addresses) {
-  setInterval(() => hearthbeatCheckLogic(hearth, servers, addresses), hearthbeatCheckFrequency);
+let hearthbeatCheck = function (hearth, addresses) {
+  setInterval(() => hearthbeatCheckLogic(hearth, addresses), hearthbeatCheckFrequency);
 }
 
 
@@ -54,16 +53,16 @@ let isNodeToRemove = (entry, index) => {
  * @param {map entry} entry 
  * @param {* index into the map} index 
  */
-let removingNodes = (entry, index, hearth, servers, addresses) => {
+let removingNodes = (entry, index, hearth, addresses) => {
   let removeFromHeart = [];
   log.info('Removing a node');
   // time expired , clean up maps.
   removeFromHeart.push(entry[0]);
-  let e = util.searchClientById(entry[0], servers);
+  let host = util.searchClientById(entry[0], addresses);
   // in case that a client is explicitly disconnected , the entry is already removed from the Map.
   // rebalance partitions when a server is removed.
-  partitioner.rebalancePartitions(e[0].client, servers, addresses);
-  util.broadcastMessage(servers, { type: NODE_REMOVED, msg: addresses })
+  partitioner.rebalancePartitions(host.client, addresses);
+  util.broadcastMessage(addresses, { type: NODE_REMOVED, msg: addresses })
   removeFromHeart.forEach(e => {
     hearth.delete(e);
   })

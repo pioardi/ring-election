@@ -12,16 +12,16 @@ const {MESSAGE_SEPARATOR} = require('./constants');
 /**
  * Search a client by instance.
  * @param {*} id the client  to search
- * @param {*} ds a map
+ * @param {Array} ds an array
  * @returns the entry in the map.
  */
 let searchClient = (client,ds) => {
     let result ;
     Rx.Observable.from(ds)
-      .filter( (e,index) => e[0].client == client)
+      .filter( (e) => e.client == client)
       .first()
       .subscribe(
-          entry => result= entry,
+          host => result= host,
           e => log.error(e)
       );
     return result;
@@ -30,16 +30,16 @@ let searchClient = (client,ds) => {
 /**
  * Search a client by client Id.
  * @param {*} priority the priority to search
- * @param {*} ds a map
+ * @param {Array} ds an array
  * @returns the entry in the map.
  */
 let searchClientByPriority = (priority,ds) => {
     let result ;
     Rx.Observable.from(ds)
-      .filter( (e,index) => e[1].priority == priority)
+      .filter( (e,index) => e.priority == priority)
       .first()
       .subscribe(
-          entry => result= entry,
+          host => result= host,
           e => log.error(e)
       );
     return result;
@@ -48,16 +48,16 @@ let searchClientByPriority = (priority,ds) => {
 /**
  * Search a client by client Id.
  * @param {int} id id to search
- * @param {Map} ds a map with id as keys.
+ * @param {Array} ds a map with id as keys.
  * @returns the entry in the map.
  */
 let searchClientById = (id,ds) => {
     let result ;
     Rx.Observable.from(ds)
-      .filter( (e,index) => e[0].id == id)
+      .filter( (e) => e.id == id)
       .first()
       .subscribe(
-          entry => result= entry,
+          host => result= host,
           e => log.error(e)
       );
     return result;
@@ -66,14 +66,16 @@ let searchClientById = (id,ds) => {
 
 /**
  * Broadcast message to each node.
+ * @param {Array} addresses , addresses in the cluster.
  * @param {Object} msg , message to sent in broadcast.
- * @param {Map} servers , servers in the cluster.
  */
-let broadcastMessage = (servers,msg) => {
-    if (servers.size > 0) {
-      servers.forEach((value, key, map) => {
-        key.client.write(JSON.stringify(msg) + MESSAGE_SEPARATOR);
-      })
+let broadcastMessage = (addresses,msg) => {
+    if (addresses.length > 0) {
+        Rx.Observable
+          .from(addresses)
+          .forEach(host => {
+            host.client.write(JSON.stringify(msg) + MESSAGE_SEPARATOR);
+          })   
     }
   }
 

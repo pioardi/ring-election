@@ -113,14 +113,14 @@ let updatePartitionAssigned = () => {
 let seedNodeReconnection = () => {
   log.error('Seed node is dead');
    Rx.Observable.from(addresses)
-    .find((e) => e.priority === 1)
-    .subscribe(e => {
-      log.info(`Find vice seed node with address ${e.address} and port ${e.port}`);
-      process.env.SEED_NODE = e.address;
-      peerPort = e.port;
-      setTimeout(createClient, process.env.TIME_TO_RECONNECT || 3000);
-    }, error => log.error(error),
-      () => log.info('Reconnected to seed node'));
+     .find((e) => e.priority === 1)
+     .subscribe(e => {
+       log.info(`Find vice seed node with address ${e.hostname} and port ${e.port}`);
+       process.env.SEED_NODE = e.hostname;
+       peerPort = e.port;
+       setTimeout(createClient, process.env.TIME_TO_RECONNECT || 3000);
+     }, error => log.error(error),
+     () => log.info('Reconnected to seed node'));
 }
 
 /**
