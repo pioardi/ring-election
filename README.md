@@ -23,7 +23,7 @@ Each node in the ring will have an ID and a priority , if the leader node will d
  HEARTH_BEAT_FREQUENCY: The frequency with which a hearth beat is performed by a follower , default is 1000 <br>
  HEARTH_BEAT_CHECK_FREQUENCY: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
  LOG_LEVEL: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.<br>
- NUM_PARTITIONS: Number of partitions to distribute across the cluster , default is 10.
+ NUM_PARTITIONS: Number of partitions to distribute across the cluster , default is 10. <br>
  SEED_NODE : hostname of leader node , default is localhost
 
 <h2 id="todo">TODO List </h2>
