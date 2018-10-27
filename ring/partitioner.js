@@ -86,7 +86,7 @@ let assignPartitions = (client,addresses) => {
 /**
  * Revoke partitions assigned to client and split them to other nodes.
  * @param {*} client the client removed from the cluster.
- * @param {Array} addresses addresses in the cluster , optional.
+ * @param {Array} addresses nodes in the cluster , optional.
  * @public
  * 
  */
