@@ -11,14 +11,14 @@ const hash = crypto.createHash('sha256');
 const Rx = require('@reactivex/rxjs');
 const log = require('./logger');
 const util = require('./util');
-
+const numberOfPartitions = process.env.NUM_PARTITIONS || 10;
 
 /**
  * Default Partitioner is a round robin algorithm
  * @param {*} data  the data to insert.
  */
-let defaultPartitioner = (data) => {
-   return  hash.digest(data) % process.env.NUM_PARTITIONS;
+let defaultPartitioner = (data) => {  
+   return  hash.digest(data).length % numberOfPartitions;
 };
 
 /**

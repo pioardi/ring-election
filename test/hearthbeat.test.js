@@ -21,7 +21,7 @@ describe('Hearth beat', () => {
         },20)
     });
 
-    it('Shoulddo an hearth check with correct frequency', (done) => {
+    it('Should do an hearth check with correct frequency', (done) => {
         let ds = [];
         let count = 0;
         let client = {
