@@ -28,7 +28,7 @@ Each node in the ring will have an ID and a priority , if the leader node will d
 
 <h2 id="todo">TODO List </h2>
 Integration tests and examples <br>
-Continous integrations <br>
+Continous integration <br>
 Allow to specify more contact points when a node join the cluster <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
 Monitoring ring status with REST API<br>
