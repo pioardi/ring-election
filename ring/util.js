@@ -3,7 +3,7 @@
  * @author Alessandro Pio Ardizio
  * @since 0.1
  */
-'use strict'
+'use strict';
 
 const Rx = require('@reactivex/rxjs');
 const log = require('./logger');
@@ -16,16 +16,16 @@ const {MESSAGE_SEPARATOR} = require('./constants');
  * @returns the entry in the map.
  */
 let searchClient = (client,ds) => {
-    let result ;
-    Rx.Observable.from(ds)
+   let result ;
+   Rx.Observable.from(ds)
       .filter( (e) => e.client == client)
       .first()
       .subscribe(
-          host => result= host,
-          e => log.error(e)
+         host => result= host,
+         e => log.error(e)
       );
-    return result;
-}
+   return result;
+};
 
 /**
  * Search a client by client Id.
@@ -34,16 +34,16 @@ let searchClient = (client,ds) => {
  * @returns the entry in the map.
  */
 let searchClientByPriority = (priority,ds) => {
-    let result ;
-    Rx.Observable.from(ds)
+   let result ;
+   Rx.Observable.from(ds)
       .filter( (e,index) => e.priority == priority)
       .first()
       .subscribe(
-          host => result= host,
-          e => log.error(e)
+         host => result= host,
+         e => log.error(e)
       );
-    return result;
-}
+   return result;
+};
 
 /**
  * Search a client by client Id.
@@ -52,16 +52,16 @@ let searchClientByPriority = (priority,ds) => {
  * @returns the entry in the map.
  */
 let searchClientById = (id,ds) => {
-    let result ;
-    Rx.Observable.from(ds)
+   let result ;
+   Rx.Observable.from(ds)
       .filter( (e) => e.id == id)
       .first()
       .subscribe(
-          host => result= host,
-          e => log.error(e)
+         host => result= host,
+         e => log.error(e)
       );
-    return result;
-}
+   return result;
+};
 
 
 /**
@@ -70,18 +70,18 @@ let searchClientById = (id,ds) => {
  * @param {Object} msg , message to sent in broadcast.
  */
 let broadcastMessage = (addresses,msg) => {
-    if (addresses.length > 0) {
-        Rx.Observable
-          .from(addresses)
-          .forEach(host => {
+   if (addresses.length > 0) {
+      Rx.Observable
+         .from(addresses)
+         .forEach(host => {
             host.client.write(JSON.stringify(msg) + MESSAGE_SEPARATOR);
-          })   
-    }
-  }
+         });   
+   }
+};
 
 module.exports = {
-    searchClient: searchClient,
-    searchClientByPriority: searchClientByPriority,
-    searchClientById: searchClientById,
-    broadcastMessage: broadcastMessage
-}
+   searchClient: searchClient,
+   searchClientByPriority: searchClientByPriority,
+   searchClientById: searchClientById,
+   broadcastMessage: broadcastMessage
+};
