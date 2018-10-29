@@ -41,6 +41,7 @@ Retry leader reconnection <br>
 
 <h2>Examples</h2>
 <strong>How to leader</strong><br>
+
 ```javascript
 const ring = require('ring-election');
 ring.leader.createServer();
