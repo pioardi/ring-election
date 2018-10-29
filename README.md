@@ -5,6 +5,7 @@
 <a href="#config">Config</a><br>
 <a href="#todo">Vision</a><br>
 <a href="#hld">High level design</a><br>
+<a href="#examples">Examples </><br>
 
 
 
@@ -37,3 +38,25 @@ Retry leader reconnection <br>
 <h2 id="hld">High Level Diagram</h2>
 
 ![Dynamic diagram](doc/Ring.jpg)
+
+<h2>Examples</h2>
+<strong>How to leader</strong><br>
+```javascript
+const ring = require('ring-election');
+ring.leader.createServer();
+// to get ring info
+ring.leader.ringInfo();
+```
+<strong>How to follower</strong><br>
+
+```javascript
+const ring = require('ring-election');
+ring.follower.createClient();
+// to get ring info
+ring.follower.ringInfo();
+// to get assigned partitions
+ring.follower.partitions();
+```
+
+See examples folder for more advanced examples
+
