@@ -27,7 +27,8 @@ Each node in the ring will have an ID and a priority , if the leader node will d
  SEED_NODE : hostname of leader node , default is localhost
 
 <h2 id="todo">TODO List </h2>
-unit tests <br>
+Integration tests and examples <br>
+Continous integration <br>
 Allow to specify more contact points when a node join the cluster <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
 Monitoring ring status with REST API<br>
