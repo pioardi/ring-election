@@ -1,2 +1,2 @@
-const follower = require('./ring/follower')
+const follower = require('./ring/follower');
 follower.createClient();

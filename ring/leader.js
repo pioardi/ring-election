@@ -103,7 +103,12 @@ let clientHostname = (client, hostname) => {
 let generateID = () => {
    return Math.random().toString(36).substring(7);
 };
+
+let ringInfo = () => {
+   return addresses;
+};
 module.exports = {
    createServer: createServer,
-   defaultPartitioner: partitioner,
+   defaultPartitioner: partitioner.defaultPartitioner,
+   ring: ringInfo
 };

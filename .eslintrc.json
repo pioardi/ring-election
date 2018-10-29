@@ -13,7 +13,7 @@
         "sourceType": "module"
     },
     "rules": {
-        "indent": ["error", 3],
+        
         "linebreak-style": [
             "error",
             "unix"

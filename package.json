@@ -2,7 +2,7 @@
   "name": "ring-election",
   "version": "0.0.1",
   "description": "Leader and followers algorithm to make partitioning easy.",
-  "main": "ring/server.js",
+  "main": "index.js",
   "engines": {
     "node": ">=10.0.0",
     "npm": ">=6.0.0"
@@ -11,7 +11,8 @@
     "scheduler"
   ],
   "scripts": {
-    "start-leader": "node ring/start.js",
+    "start-leader": "node start-leader.js",
+    "start-follower": "node start-follower.js",
     "test": "REPORTER=tap mocha --timeout 5000 **/*test.js",
     "demontest": "nodemon --exec \"npm test\"",
     "coverage": "REPORTER=tap nyc mocha  --timeout 5000 **/*test.js"

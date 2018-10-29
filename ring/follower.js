@@ -151,7 +151,15 @@ let seedEndEvent = (client, e) => {
 
 
 // --------------------- MESSAGING --------------------- 
-
+let ringInfo = () => {
+      return addresses;
+};
+let partitions = () => {
+      return assignedPartitions;
+};
 module.exports = {
-   createClient: createClient
+   createClient: createClient,
+   defaultPartitioner: require('./partitioner').defaultPartitioner,
+   ring : ringInfo,
+   partitions: partitions
 };
