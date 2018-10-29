@@ -83,7 +83,7 @@ describe('broadcastMessage', () => {
       let ds = [];
       let count = 0;
       let client = {
-         write : (msg) => {
+         write : () => {
             count++;
          }
       };

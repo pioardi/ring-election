@@ -45,7 +45,7 @@ let hearthbeatCheck = function (hearth, addresses) {
  * @param {map entry} entry 
  * @param {* index into the map} index 
  */
-let isNodeToRemove = (entry, index) => {
+let isNodeToRemove = (entry) => {
    return Date.now() - entry[1] > maxInactiveTime;
 };
 /**

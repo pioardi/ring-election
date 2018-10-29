@@ -10,7 +10,7 @@ describe('Hearth check', () => {
       let count = 0;
       mock.reRequire('../ring/logger');
       mock('../ring/logger', {
-         debug : (msg) => {
+         debug : () => {
             count++;
          }
       });
@@ -27,7 +27,7 @@ describe('Hearth check', () => {
       let count = 0;
       mock.stopAll();
       mock('../ring/partitioner' , {
-         rebalancePartitions : (p1,p2) => {
+         rebalancePartitions : () => {
             count++;
          }
       });

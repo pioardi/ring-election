@@ -52,7 +52,7 @@ let createServer = () => {
 
 
 let clientDisconnected = (client) => {
-   log.info('A node is removed from the cluster , waiting heart check to rebalance partitions');
+   log.info(`A node is removed from the cluster ${client.remoteAddress}, waiting heart check to rebalance partitions`);
 };
 
 // --------------------- CORE --------------------- 

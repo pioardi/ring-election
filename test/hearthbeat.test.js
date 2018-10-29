@@ -9,6 +9,7 @@ describe('Hearth beat', () => {
       let count = 0;
       let client = {
          write : (msg) => {
+            msg;
             count++;
          },
          writable : true
@@ -23,7 +24,7 @@ describe('Hearth beat', () => {
    it('Should do an hearth check with correct frequency', (done) => {
       let count = 0;
       let client = {
-         write : (msg) => {
+         write : () => {
             count++;
          },
          writable : false
