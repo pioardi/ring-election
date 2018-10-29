@@ -46,7 +46,7 @@ Retry leader reconnection <br>
 const ring = require('ring-election');
 ring.leader.createServer();
 // to get ring info
-ring.leader.ringInfo();
+ring.leader.ring();
 ```
 <strong>How to follower</strong><br>
 
@@ -54,7 +54,7 @@ ring.leader.ringInfo();
 const ring = require('ring-election');
 ring.follower.createClient();
 // to get ring info
-ring.follower.ringInfo();
+ring.follower.ring();
 // to get assigned partitions
 ring.follower.partitions();
 ```
