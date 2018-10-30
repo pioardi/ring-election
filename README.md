@@ -1,4 +1,5 @@
-# Ring election
+# Ring election  
+[![Build Status](https://travis-ci.org/pioardi/ring-election.svg?branch=master)](https://travis-ci.org/pioardi/ring-election) <br>
 
 <h2>Contents</h2>
 <a href="#overview">Overview</a><br>
