@@ -35,6 +35,7 @@ Allow to specify more contact points when a node join the cluster <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
 Monitoring ring status with REST API<br>
 Retry leader reconnection <br>
+Document use cases <br>
 Tag 1.0 and public on npm<br>
 
 <h2 id="hld">High Level Diagram</h2>
