@@ -7,4 +7,3 @@ install:
   - npm install
 script:
   - npm run test
-  - export PORT=3001 && npm run coverage
