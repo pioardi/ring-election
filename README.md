@@ -1,5 +1,6 @@
 # Ring election  
 [![Build Status](https://travis-ci.org/pioardi/ring-election.svg?branch=master)](https://travis-ci.org/pioardi/ring-election) <br>
+[![Coverage Status](https://coveralls.io/repos/github/pioardi/ring-election/badge.svg)](https://coveralls.io/github/pioardi/ring-election)
 
 <h2>Contents</h2>
 <a href="#overview">Overview</a><br>
