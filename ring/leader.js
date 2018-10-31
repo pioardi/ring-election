@@ -48,6 +48,7 @@ let createServer = () => {
    server.listen(peerPort, function () {
       log.info('server is listening');
    });
+   return server;
 };
 
 

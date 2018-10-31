@@ -21,7 +21,7 @@ describe('Integration test', () => {
                     expect(node.partitions.length).toBe(5);
                 });
                 done();
-            }, 20);
+            }, 100);
         }, 20);
     });
 });

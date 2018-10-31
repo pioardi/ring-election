@@ -54,6 +54,7 @@ let createClient = () => {
    client.on('end', (e) => seedErrorEvent(client, e));
    client.on('error', (e) => seedEndEvent(client, e));
    client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }));
+   return client;
 };
 
 
