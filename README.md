@@ -20,6 +20,20 @@ A node will be removed if it does not send an hearth beat for a while , this pro
 Each node in the ring will have an ID and a priority , if the leader node will die the node with lower priority will be elect as leader. <br>
 If a node is added or removed from the cluster, the allocated partitions will be rebalanced.
 
+<strong>What the ring-election driver offers you ?</strong><br>
+
+- A default partitioner that for an object returns the partition to which it is assigned.<br>
+- Mechanism of leader election<br>
+- Assignment and rebalancing between nodes<br>
+- Automatic re-election of the leader<br>
+
+<strong>What problems can you solve with this driver ?</strong><br>
+- Scalability<br>
+- High availability<br>
+- Concurrency between nodes in a cluster<br>
+
+<strong>Use cases</strong>
+Coming soon..
 
 
 <h2 id="config"> Configuration </h2>
