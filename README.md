@@ -17,8 +17,8 @@ Ring-election is a driver that implements a distributed algorithm that assigns t
 In a simple use case each node can obtain data that are part of the partitions of which it is owner and work on them. <br>
 The algorithm will assign to each node one or more partitions to work with.<br>
 A node will be removed if it does not send an hearth beat for a while , this process is called heart check.<br>
-Each node in the ring will have an ID and a priority , if the leader node will die the node with lower priority will be elect as leader.
-If a node 
+Each node in the ring will have an ID and a priority , if the leader node will die the node with lower priority will be elect as leader. <br>
+If a node is added or removed from the cluster, the allocated partitions will be rebalanced.
 
 
 
