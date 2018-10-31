@@ -24,13 +24,15 @@ If a node is added or removed from the cluster, the allocated partitions will be
 
 - A default partitioner that for an object returns the partition to which it is assigned.<br>
 - Mechanism of leader election<br>
-- Assignment and rebalancing between nodes<br>
+- Failure detection between nodes.<br>
+- Assignment and rebalancing of partitions between nodes<br>
 - Automatic re-election of the leader<br>
 
 <strong>What problems can you solve with this driver ?</strong><br>
 - Scalability<br>
 - High availability<br>
 - Concurrency between nodes in a cluster<br>
+- Automatic failover<br>
 
 <strong>Use cases</strong>
 Coming soon..
