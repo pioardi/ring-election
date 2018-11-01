@@ -4,10 +4,11 @@
 
 <h2>Contents</h2>
 <a href="#overview">Overview</a><br>
+<a href="#examples">Examples </><br>
 <a href="#config">Config</a><br>
 <a href="#todo">Vision</a><br>
 <a href="#hld">High level design</a><br>
-<a href="#examples">Examples </><br>
+
 
 
 
@@ -35,7 +36,39 @@ If a node is added or removed from the cluster, the allocated partitions will be
 - Automatic failover<br>
 
 <strong>Use cases</strong>
-Coming soon..
+
+<strong>Distributed Scheduler</strong>
+![Dynamic diagram](doc/Ring-Scheduler-Use-Case.jpg)
+
+
+<h2>Examples</h2>
+<strong>How to leader</strong><br>
+
+```javascript
+const ring = require('ring-election');
+ring.leader.createServer();
+// to get ring info
+ring.leader.ring();
+// Your leader will be the coordinator.
+```
+<strong>How to follower</strong><br>
+
+```javascript
+const ring = require('ring-election');
+ring.follower.createClient();
+// to get ring info
+ring.follower.ring();
+// to get assigned partitions
+let assignedPartitions = ring.follower.partitions();
+// now let me assume that a follower will create some data
+// and you want to partition this data
+let partition = ring.follower.defaultPartitioner('KEY');
+// save your data including the partition on a storage
+// you will be the only one in the cluster working on the partitions assigned to you.
+```
+
+See examples folder for more advanced examples
+
 
 
 <h2 id="config"> Configuration </h2>
@@ -48,10 +81,9 @@ Coming soon..
  SEED_NODE : hostname of leader node , default is localhost
 
 <h2 id="todo">TODO List </h2>
-Integration tests and examples <br>
 Allow to specify more contact points when a node join the cluster <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
-Monitoring ring status with REST API<br>
+Monitoring ring status with REST API here we can do an integration test also<br>
 Retry leader reconnection <br>
 Document use cases <br>
 Tag 1.0 and public on npm<br>
@@ -60,25 +92,4 @@ Tag 1.0 and public on npm<br>
 
 ![Dynamic diagram](doc/Ring.jpg)
 
-<h2>Examples</h2>
-<strong>How to leader</strong><br>
-
-```javascript
-const ring = require('ring-election');
-ring.leader.createServer();
-// to get ring info
-ring.leader.ring();
-```
-<strong>How to follower</strong><br>
-
-```javascript
-const ring = require('ring-election');
-ring.follower.createClient();
-// to get ring info
-ring.follower.ring();
-// to get assigned partitions
-ring.follower.partitions();
-```
-
-See examples folder for more advanced examples
 
