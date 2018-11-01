@@ -37,8 +37,8 @@ If a node is added or removed from the cluster, the allocated partitions will be
 
 <strong>Use cases</strong>
 
-<strong>Distributed Scheduler</strong>
-Each Scheduler instance will work on the assigned partitions .
+<strong>Distributed Scheduler</strong><br>
+Each Scheduler instance will work on the assigned partitions .<br>
 ![Dynamic diagram](doc/Ring-Scheduler-Use-Case.jpg)
 
 
