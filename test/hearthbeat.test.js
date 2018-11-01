@@ -1,6 +1,8 @@
 const expect = require('expect');
 process.env['HEARTH_BEAT_FREQUENCY'] = 1;
-const hearthbeat = require('../ring/hearthbeat');
+const mock = require('mock-require');
+mock.stopAll();
+const hearthbeat = mock.reRequire('../ring/hearthbeat');
 
 
 describe('Hearth beat', () => {

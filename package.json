@@ -19,6 +19,12 @@
   },
   "author": "pioardi",
   "license": "MIT",
+  "nyc": {
+    "exclude": [
+      "**/follower.js",
+      "**/leader.js"
+    ]
+  },
   "dependencies": {
     "@reactivex/rxjs": "^5.5.11",
     "compression": "^1.7.2",

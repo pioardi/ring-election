@@ -1,5 +1,6 @@
 const expect = require('expect');
-const util = require('../ring/util');
+const mock = require('mock-require');
+const util = mock.reRequire('../ring/util');
 
 describe('Search Client', () => {
 
