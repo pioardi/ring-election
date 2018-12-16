@@ -15,9 +15,11 @@ const { MESSAGE_SEPARATOR } = require('./constants');
  * @param {*} client , seed node connection.
  */
 let hearthbeatLogic = (client, id) => {
-   // infinite recursion.
-   if (client.writable)
-      client.write(JSON.stringify({ type: HEARTH_BEAT, msg: id, id: id }) + MESSAGE_SEPARATOR);
+  // infinite recursion.
+  if (client.writable)
+    client.write(
+      JSON.stringify({ type: HEARTH_BEAT, msg: id, id: id }) + MESSAGE_SEPARATOR
+    );
 };
 
 /**
@@ -25,7 +27,7 @@ let hearthbeatLogic = (client, id) => {
  * @param {*} client , seed node connection.
  */
 let hearthbeat = (client, id) => {
-   setInterval(() => hearthbeatLogic(client, id), hearthbeatFrequency);
+  setInterval(() => hearthbeatLogic(client, id), hearthbeatFrequency);
 };
 
 module.exports = hearthbeat;
