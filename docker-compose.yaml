@@ -1,0 +1,35 @@
+version : '3'
+
+services:
+  leader:
+    image: ring-election
+    environment: 
+      NODE_ENV: dev
+      PORT: 3000
+      SEED_NODE: localhost
+      LEADER_MODE: 1
+    hostname: leader
+    ports: 
+      - 3000:3000
+  follower-1:
+    image: ring-election
+    environment: 
+      NODE_ENV: dev
+      PORT: 3000
+      SEED_NODE: leader
+    hostname: follower-1
+    ports:
+      - 3001:3000
+    depends_on:
+      - leader
+  follower-2:
+    image: ring-election
+    environment: 
+      NODE_ENV: dev
+      PORT: 3000
+      SEED_NODE: leader
+    hostname: follower-2
+    ports:
+      - 3002:3000
+    depends_on:
+      - leader

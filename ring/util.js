@@ -32,7 +32,8 @@ let searchClient = (client, ds) => {
  */
 let searchClientByPriority = (priority, ds) => {
   let result;
-  Rx.Observable.from(ds)
+  Rx.Observable
+    .from(ds)
     .filter(e => e.priority == priority)
     .first()
     .subscribe(host => (result = host), e => log.error(e));
@@ -47,7 +48,8 @@ let searchClientByPriority = (priority, ds) => {
  */
 let searchClientById = (id, ds) => {
   let result;
-  Rx.Observable.from(ds)
+  Rx.Observable
+  .from(ds)
     .filter(e => e.id == id)
     .first()
     .subscribe(host => (result = host), e => log.error(e));
