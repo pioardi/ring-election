@@ -68,6 +68,13 @@ let partition = ring.follower.defaultPartitioner('KEY');
 // you will be the only one in the cluster working on the partitions assigned to you.
 ```
 
+<strong> Try it out ! </strong>
+```bash
+   docker image build -t ring-election .
+   docker-compose up
+```
+
+ 
 See examples folder for more advanced examples
 
 
