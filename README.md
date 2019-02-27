@@ -86,10 +86,9 @@ See examples folder for more advanced examples
  HEARTH_BEAT_CHECK_FREQUENCY: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
  LOG_LEVEL: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.<br>
  NUM_PARTITIONS: Number of partitions to distribute across the cluster , default is 10. <br>
- SEED_NODE : hostname of leader node , default is localhost
+ SEED_NODES : hostnames of leader node comma separated, default is localhost
 
 <h2 id="todo">TODO List </h2>
-Allow to specify more contact points when a node join the cluster <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
 Monitoring ring status with REST API here we can do an integration test also<br>
 Retry leader reconnection <br>

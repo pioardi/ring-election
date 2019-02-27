@@ -6,7 +6,7 @@ services:
     environment: 
       NODE_ENV: dev
       PORT: 3000
-      SEED_NODE: localhost
+      SEED_NODES: leader,follower-1,follower-2
       LEADER_MODE: 1
     hostname: leader
     ports: 
@@ -16,7 +16,7 @@ services:
     environment: 
       NODE_ENV: dev
       PORT: 3000
-      SEED_NODE: leader
+      SEED_NODES: leader,follower-1,follower-2
     hostname: follower-1
     ports:
       - 3001:3000
@@ -27,7 +27,7 @@ services:
     environment: 
       NODE_ENV: dev
       PORT: 3000
-      SEED_NODE: leader
+      SEED_NODES: leader,follower-1,follower-2
     hostname: follower-2
     ports:
       - 3002:3000
