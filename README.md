@@ -94,7 +94,6 @@ To monitor your cluster contact any node on the path /status (HTTP verb :  GET) 
 
 
 <h2 id="todo">TODO List </h2>
-Monitoring ring status with REST API here we can do an integration test also<br>
 Tag 1.0 and public on npm<br>
 Document use cases <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
