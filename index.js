@@ -3,8 +3,7 @@
  */
 'use strict';
 
-
 module.exports = {
    leader: require('./ring/leader'),
    follower: require('./ring/follower')
-};
+}; 

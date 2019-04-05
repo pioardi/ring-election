@@ -13,12 +13,12 @@ let os = require('os');
 let hostname = os.hostname();
 let log = require('./logger');
 let peerPort = process.env.PORT || 3000;
+let monitor ;
 // --------------------- CONFIG ---------------------
 
 const net = require('net');
 const hearthbeat = require('./hearthbeat');
 const Rx = require('@reactivex/rxjs');
-const ring = require('./leader');
 // node id in the ring.
 var id;
 // priority to be elegible to be a seed node.
@@ -55,6 +55,7 @@ if (process.env.SEED_NODES) {
 } else {
   seedNodes = ['localhost'];
 }
+
 let createClient = () => {
   let seedNode;
   seedNode = detectSeedNode();
@@ -166,6 +167,8 @@ let seedErrorEvent = (client, err) => {
     log.info(
       'Becoming seed node , clearing server list and waiting for connections'
     );
+    monitor.close();
+    const ring = require('./leader');
     setTimeout(ring.createServer, process.env.TIME_TO_BECOME_SEED || 1000);
   } else {
     seedNodeReconnection();
@@ -189,6 +192,22 @@ let ringInfo = () => {
 let partitions = () => {
   return assignedPartitions;
 };
+
+// --------------------- MONITORING ---------------------
+let express = require('express');
+let app = express();
+app.get('/status', (req,res) => {
+    log.info('Status request received');
+    res.send(ringInfo()); 
+});
+app.get('/partitions', (req,res) => {
+  log.info('Partitions request received');
+  res.send(partitions()); 
+});
+let port = process.env.MONITORING_PORT || 9000;
+monitor = app.listen(port);
+log.info(`Server is monitorable at the port ${port}`);
+
 module.exports = {
   createClient: createClient,
   defaultPartitioner: require('./partitioner').defaultPartitioner,

@@ -6,20 +6,24 @@ services:
     environment: 
       NODE_ENV: dev
       PORT: 3000
+      MONITORING_PORT: 9000
       SEED_NODES: leader,follower-1,follower-2
       LEADER_MODE: 1
     hostname: leader
     ports: 
       - 3000:3000
+      - 9000:9000
   follower-1:
     image: ring-election
     environment: 
       NODE_ENV: dev
       PORT: 3000
+      MONITORING_PORT: 9000
       SEED_NODES: leader,follower-1,follower-2
     hostname: follower-1
     ports:
       - 3001:3000
+      - 9001:9000
     depends_on:
       - leader
   follower-2:
@@ -27,9 +31,11 @@ services:
     environment: 
       NODE_ENV: dev
       PORT: 3000
+      MONITORING_PORT: 9000
       SEED_NODES: leader,follower-1,follower-2
     hostname: follower-2
     ports:
       - 3002:3000
+      - 9002:9000
     depends_on:
       - leader

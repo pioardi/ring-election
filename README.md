@@ -6,9 +6,9 @@
 <a href="#overview">Overview</a><br>
 <a href="#examples">Examples </><br>
 <a href="#config">Config</a><br>
+<a href="#monitoring">Config</a><br>
 <a href="#todo">Vision</a><br>
 <a href="#hld">High level design</a><br>
-
 
 
 
@@ -86,14 +86,20 @@ See examples folder for more advanced examples
  HEARTH_BEAT_CHECK_FREQUENCY: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
  LOG_LEVEL: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.<br>
  NUM_PARTITIONS: Number of partitions to distribute across the cluster , default is 10. <br>
- SEED_NODES : hostnames of leader node comma separated, default is localhost
+ SEED_NODES : hostnames of leader node comma separated, default is localhost <br>
+ MONITORING_PORT : port to expose rest service for monitoring , default is 9000<br>
+
+<h2 id="monitoring"> Monitoring API </h2>
+To monitor your cluster contact any node on the path /status (HTTP verb :  GET) or contact a follower node on /partitions (HTTP verb :  GET). <br>
+
 
 <h2 id="todo">TODO List </h2>
-Re-add a client in the cluster when it was removed and send an hearth beat <br>
 Monitoring ring status with REST API here we can do an integration test also<br>
-Retry leader reconnection <br>
-Document use cases <br>
 Tag 1.0 and public on npm<br>
+Document use cases <br>
+Re-add a client in the cluster when it was removed and send an hearth beat <br>
+Retry leader reconnection <br>
+Tag 1.1 and public on npm<br>
 
 <h2 id="hld">High Level Diagram</h2>
 
