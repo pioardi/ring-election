@@ -6,7 +6,7 @@
 <a href="#overview">Overview</a><br>
 <a href="#examples">Examples </><br>
 <a href="#config">Config</a><br>
-<a href="#monitoring">Config</a><br>
+<a href="#monitoring">Monitoring</a><br>
 <a href="#todo">Vision</a><br>
 <a href="#hld">High level design</a><br>
 
