@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000 8080
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT [ "sh" , "./entrypoint.sh" ]
