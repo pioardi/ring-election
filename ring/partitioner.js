@@ -23,8 +23,9 @@ let defaultPartitioner = data => {
  * @param {*} s a string or an object
  */
 let hashCode = key => {
+  var h = 0;
   let s = key.toString();
-  for (var i = 0, h = 0; i < s.length; i++)
+  for (var i = 0; i < s.length; i++)
     h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
   return h;
 };
