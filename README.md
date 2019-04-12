@@ -1,6 +1,8 @@
 # Ring election
 [![Coverage Status](https://coveralls.io/repos/github/pioardi/ring-election/badge.svg?branch=master)](https://coveralls.io/github/pioardi/ring-election?branch=master)
 [![Build Status](https://travis-ci.org/pioardi/ring-election.svg?branch=master)](https://travis-ci.org/pioardi/ring-election)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9eaceda32d104341879e3ece48595d1b)](https://www.codacy.com/app/alessandroardizio94/ring-election?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pioardi/ring-election&amp;utm_campaign=Badge_Grade)
+
 
 <h2>Contents</h2>
 <a href="#overview">Overview</a><br>
