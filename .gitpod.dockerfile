@@ -1,10 +1,8 @@
-FROM gitpod/workspace-full:latest
+FROM node:alpine
 
 USER root
 # Install custom tools, runtime, etc.
-RUN apt-get update && apt-get install -y \
-        && apt-get install docker.io \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+RUN apk --update add docker docker-compose
 
 USER gitpod
 
