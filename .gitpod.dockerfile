@@ -11,4 +11,4 @@ USER gitpod
 
 
 # Give back control
-USER root
+#USER root
