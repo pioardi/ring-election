@@ -1,12 +1,10 @@
-FROM gitpod/workspace-full:latest
-
+FROM node:alpine
 USER root
 # Install custom tools, runtime, etc.
-RUN apt-get update && apt-get install -y \
-        docker-ce \
-        docker-ce-cli \
-        containerd.io \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+# Install perl
+RUN apk add --update docker && rm -rf /var/cache/apk/*
+RUN apk add --update docker-compose && rm -rf /var/cache/apk/*
+
 
 USER gitpod
 
