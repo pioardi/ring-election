@@ -4,7 +4,7 @@ USER root
 # Install perl
 RUN apk add --update docker  py-pip  python-dev libffi-dev openssl-dev gcc libc-dev make  && rm -rf /var/cache/apk/*
 RUN pip install docker-compose
-RUN systemctl enable docker
+RUN service docker start
 
 USER gitpod
 
