@@ -1,11 +1,15 @@
 {
   "name": "ring-election",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Leader and followers algorithm to make partitioning easy.",
   "main": "index.js",
   "engines": {
     "node": ">=10.0.0",
     "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pioardi/ring-election.git"
   },
   "keywords": [
     "scalability" , "concurrency" , "distributed-systems","leader-election","partitioning"

@@ -2,7 +2,7 @@ version : '3'
 
 services:
   leader:
-    image: ring-election
+    image: pioardi/ring-election:1.0
     environment: 
       NODE_ENV: dev
       PORT: 3000
@@ -14,7 +14,7 @@ services:
       - 3000:3000
       - 9000:9000
   follower-1:
-    image: ring-election
+    image: pioardi/ring-election:1.0
     environment: 
       NODE_ENV: dev
       PORT: 3000
@@ -27,7 +27,7 @@ services:
     depends_on:
       - leader
   follower-2:
-    image: ring-election
+    image: pioardi/ring-election:1.0
     environment: 
       NODE_ENV: dev
       PORT: 3000
