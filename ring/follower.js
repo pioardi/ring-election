@@ -68,9 +68,9 @@ let createClient = () => {
     () => log.info('connected to server!')
   );
   client.setNoDelay(true);
-  client.on('data', data => peerMessageHandler(data, client));
   client.on('end', e => seedErrorEvent(client, e));
   client.on('error', e => seedEndEvent(client, e, seedNode));
+  client.on('data', data => peerMessageHandler(data, client));
   client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }));
   return client;
 };
@@ -91,9 +91,9 @@ function detectSeedNode() {
 
 let peerMessageHandler = (data, client) => {
   let stringData = data.toString();
-  let arrayData = stringData.split(MESSAGE_SEPARATOR);
+  let dataArray = stringData.split(MESSAGE_SEPARATOR);
 
-  arrayData.forEach(e => {
+  dataArray.forEach(e => {
     if (e.length <= 0) return;
     let jsonData = JSON.parse(e);
     let type = jsonData.type;

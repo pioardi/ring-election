@@ -32,12 +32,12 @@ let hashCode = key => {
 
 /**
  * Assign all partitions to one node.
- * @param {*} numberOfPartitions
+ * @param {*} numOfPartitions
  * @param {*} partitionsAssigned
  * @private
  */
-function assignAllPartitions(numberOfPartitions, partitionsAssigned) {
-  for (var i = 0; i < numberOfPartitions; i++) {
+function assignAllPartitions(numOfPartitions, partitionsAssigned) {
+  for (var i = 0; i < numOfPartitions; i++) {
     partitionsAssigned.push(i);
   }
 }
