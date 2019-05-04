@@ -75,10 +75,10 @@ let peerMessageHandler = (data, client) => {
 
   arrayData.forEach(e => {
     if (e.length <= 0) return;
+    log.debug(`Receveid a message with type ${type}`);
     let jsonData = JSON.parse(e);
     let type = jsonData.type;
     let msg = jsonData.msg;
-    log.debug(`Receveid a message with type ${type}`);
     if (type === HEARTH_BEAT) {
       hearth.set(jsonData.id, Date.now());
     } else if (type === HOSTNAME) {
@@ -94,8 +94,8 @@ let peerMessageHandler = (data, client) => {
  * @param {*} hostname  hostname of the client
  */
 let clientHostname = (client, hostname) => {
-  let cliendId = generateID();
   let priority = addresses.length + 1;
+  let cliendId = generateID();
   let assignedPartitions = partitioner.assignPartitions(client, addresses);
   hearth.set(cliendId, Date.now());
   addresses.push({
