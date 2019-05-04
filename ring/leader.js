@@ -77,9 +77,9 @@ let peerMessageHandler = (data, client) => {
 
   arrayData.forEach(e => {
     if (e.length <= 0) return;
+    let type = jsonData.type;
     log.debug(`Receveid a message with type ${type}`);
     let jsonData = JSON.parse(e);
-    let type = jsonData.type;
     let msg = jsonData.msg;
     if (type === HEARTH_BEAT) {
       hearth.set(jsonData.id, Date.now());
