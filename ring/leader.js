@@ -5,7 +5,6 @@
  */
 'use strict';
 
-
 const partitioner = require('./partitioner');
 // --------------------- CONFIG ---------------------
 let log = require('./logger');
@@ -40,6 +39,9 @@ let addresses = [];
  * It will wait for client connections and will broadcast gossip info.
  */
 let createServer = () => {
+  let port = process.env.MONITORING_PORT || 9000;
+  app.listen(port);
+  log.info(`Server is monitorable at the port ${port}`);
   var server = net.createServer(client => {
     client.setNoDelay(true);
     log.info(`New Client connected host ${JSON.stringify(client.address())}`);
@@ -135,14 +137,10 @@ let ringInfo = () => {
 // --------------------- MONITORING ---------------------
 let express = require('express');
 let app = express();
-app.get('/status', (req,res) => {
-    log.info('Status request received');
-    res.send(ringInfo()); 
+app.get('/status', (req, res) => {
+  log.info('Status request received');
+  res.send(ringInfo());
 });
-let port = process.env.MONITORING_PORT || 9000;
-app.listen(port);
-log.info(`Server is monitorable at the port ${port}`);
-
 
 module.exports = {
   createServer: createServer,

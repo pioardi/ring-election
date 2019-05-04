@@ -13,7 +13,7 @@ let os = require('os');
 let hostname = os.hostname();
 let log = require('./logger');
 let peerPort = process.env.PORT || 3000;
-let monitor ;
+let monitor;
 // --------------------- CONFIG ---------------------
 
 const net = require('net');
@@ -57,6 +57,9 @@ if (process.env.SEED_NODES) {
 }
 
 let createClient = () => {
+  let port = process.env.MONITORING_PORT || 9000;
+  monitor = app.listen(port);
+  log.info(`Server is monitorable at the port ${port}`);
   let seedNode;
   seedNode = detectSeedNode();
 
@@ -196,17 +199,14 @@ let partitions = () => {
 // --------------------- MONITORING ---------------------
 let express = require('express');
 let app = express();
-app.get('/status', (req,res) => {
-    log.info('Status request received');
-    res.send(ringInfo()); 
+app.get('/status', (req, res) => {
+  log.info('Status request received');
+  res.send(ringInfo());
 });
-app.get('/partitions', (req,res) => {
+app.get('/partitions', (req, res) => {
   log.info('Partitions request received');
-  res.send(partitions()); 
+  res.send(partitions());
 });
-let port = process.env.MONITORING_PORT || 9000;
-monitor = app.listen(port);
-log.info(`Server is monitorable at the port ${port}`);
 
 module.exports = {
   createClient: createClient,
