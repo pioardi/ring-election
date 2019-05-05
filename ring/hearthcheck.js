@@ -64,7 +64,9 @@ let removingNodes = (entry, index, hearth, addresses) => {
   let host = util.searchClientById(entry[0], addresses);
   // in case that a client is explicitly disconnected , the entry is already removed from the Map.
   // rebalance partitions when a server is removed.
-  partitioner.rebalancePartitions(host.client, addresses);
+  if(host){
+    partitioner.rebalancePartitions(host.client, addresses);
+  }
   util.broadcastMessage(addresses, { type: NODE_REMOVED, msg: addresses });
   removeFromHeart.forEach(e => {
     hearth.delete(e);

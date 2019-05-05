@@ -174,6 +174,7 @@ let seedErrorEvent = (client, err) => {
     const ring = require('./leader');
     setTimeout(ring.createServer, process.env.TIME_TO_BECOME_SEED || 1000);
   } else {
+    monitor.close();
     seedNodeReconnection();
   }
 };
