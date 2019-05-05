@@ -1,6 +1,6 @@
 {
   "name": "ring-election",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Leader and followers algorithm to make partitioning easy.",
   "main": "index.js",
   "engines": {

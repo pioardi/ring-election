@@ -51,9 +51,6 @@ let addresses;
 let seedNodes;
 if (process.env.SEED_NODES) {
   seedNodes = process.env.SEED_NODES.split(',');
-  seedNodes.push('localhost');
-} else {
-  seedNodes = ['localhost'];
 }
 
 let createClient = () => {
@@ -72,7 +69,8 @@ let createClient = () => {
   );
   client.setNoDelay(true);
   client.on('end', e => seedErrorEvent(client, e));
-  client.on('error', e => seedEndEvent(client, e, seedNode));
+  // TIP: for now avoid to handle the on error event
+  client.on('error' , e => log.error(`Error connecting to a seed node ${e}`));
   client.on('data', data => peerMessageHandler(data, client));
   client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }));
   return client;
@@ -170,6 +168,7 @@ let seedErrorEvent = (client, err) => {
     log.info(
       'Becoming seed node , clearing server list and waiting for connections'
     );
+    assignedPartitions = [];
     monitor.close();
     const ring = require('./leader');
     setTimeout(ring.createServer, process.env.TIME_TO_BECOME_SEED || 1000);
@@ -179,15 +178,6 @@ let seedErrorEvent = (client, err) => {
   }
 };
 
-/**
- * Error handling on sockets.
- * @param {*} client , client disconnected
- * @param {*} e  , error
- */
-let seedEndEvent = (client, e, seedNode) => {
-  log.error(JSON.stringify(e));
-  if (seedNode != 'localhost') createClient();
-};
 
 // --------------------- MESSAGING ---------------------
 let ringInfo = () => {
