@@ -7,7 +7,7 @@ services:
       NODE_ENV: dev
       PORT: 3000
       MONITORING_PORT: 9000
-      SEED_NODES: leader,follower-1,follower-2
+      SEED_NODES: leader:3000,follower-1:3001,follower-2:3002
       LEADER_MODE: 1
     hostname: leader
     ports: 
@@ -17,12 +17,12 @@ services:
     image: pioardi/ring-election:1.0
     environment: 
       NODE_ENV: dev
-      PORT: 3000
+      PORT: 3001
       MONITORING_PORT: 9000
-      SEED_NODES: leader,follower-1,follower-2
+      SEED_NODES: leader:3000,follower-1:3001,follower-2:3002
     hostname: follower-1
     ports:
-      - 3001:3000
+      - 3001:3001
       - 9001:9000
     depends_on:
       - leader
@@ -30,12 +30,12 @@ services:
     image: pioardi/ring-election:1.0
     environment: 
       NODE_ENV: dev
-      PORT: 3000
+      PORT: 3002
       MONITORING_PORT: 9000
-      SEED_NODES: leader,follower-1,follower-2
+      SEED_NODES: leader:3000,follower-1:3001,follower-2:3002
     hostname: follower-2
     ports:
-      - 3002:3000
+      - 3002:3002
       - 9002:9000
     depends_on:
       - leader

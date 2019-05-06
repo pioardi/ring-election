@@ -12,7 +12,6 @@
 let os = require('os');
 let hostname = os.hostname();
 let log = require('./logger');
-let peerPort = process.env.PORT || 3000;
 let monitor;
 // --------------------- CONFIG ---------------------
 
@@ -51,6 +50,9 @@ let addresses;
 let seedNodes;
 if (process.env.SEED_NODES) {
   seedNodes = process.env.SEED_NODES.split(',');
+  seedNodes.push('localhost');
+} else {
+  seedNodes = ['localhost'];
 }
 
 let createClient = () => {
@@ -62,15 +64,15 @@ let createClient = () => {
 
   var client = net.connect(
     {
-      host: seedNode,
-      port: peerPort
+      host: seedNode.split(':')[0],
+      port: seedNode.split(':')[1]
     },
     () => log.info('connected to server!')
   );
   client.setNoDelay(true);
-  client.on('end', e => seedErrorEvent(client, e));
+  client.on('end', e => seedEndEvent(client, e));
   // TIP: for now avoid to handle the on error event
-  client.on('error' , e => log.error(`Error connecting to a seed node ${e}`));
+  client.on('error' , e => seedErrorEvent(client,e,seedNode));
   client.on('data', data => peerMessageHandler(data, client));
   client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }));
   return client;
@@ -144,10 +146,8 @@ let seedNodeReconnection = () => {
     .subscribe(
       e => {
         log.info(
-          `Find vice seed node with address ${e.hostname} and port ${e.port}`
+          `Find vice seed node with address ${e.hostname}`
         );
-        process.env.SEED_NODES = e.hostname;
-        peerPort = e.port;
         setTimeout(createClient, process.env.TIME_TO_RECONNECT || 3000);
       },
       error => log.error(error),
@@ -158,7 +158,7 @@ let seedNodeReconnection = () => {
 /**
  * Handler for seed node disconnection.
  */
-let seedErrorEvent = (client, err) => {
+let seedEndEvent = (client, err) => {
   if (err) log.error(`Seed error event : ${err}`);
   log.info('seed node disconnected');
   client.end();
@@ -176,6 +176,16 @@ let seedErrorEvent = (client, err) => {
     monitor.close();
     seedNodeReconnection();
   }
+};
+
+/**
+ * Error handling on sockets.
+ * @param {*} client , client disconnected
+ * @param {*} e  , error
+ */
+let seedErrorEvent = (client, e, seedNode) => {
+  log.error(JSON.stringify(e));
+  if (seedNode != 'localhost') createClient();
 };
 
 
