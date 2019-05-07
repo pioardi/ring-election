@@ -50,17 +50,20 @@ let addresses;
 let seedNodes;
 if (process.env.SEED_NODES) {
   seedNodes = process.env.SEED_NODES.split(',');
-  seedNodes.push('localhost');
 } else {
   seedNodes = ['localhost'];
 }
 
 let createClient = () => {
-  let port = process.env.MONITORING_PORT || 9000;
-  monitor = app.listen(port);
-  log.info(`Server is monitorable at the port ${port}`);
+
   let seedNode;
   seedNode = detectSeedNode();
+
+  if(!seedNode){
+    log.info('Unable to connect to any node into the cluster,you will become the leader!');
+    require('./leader').createServer();
+    return;
+  }
 
   var client = net.connect(
     {
@@ -75,7 +78,6 @@ let createClient = () => {
   client.on('error' , e => seedErrorEvent(client,e,seedNode));
   client.on('data', data => peerMessageHandler(data, client));
   client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }));
-  return client;
 };
 
 /**
@@ -169,11 +171,9 @@ let seedEndEvent = (client, err) => {
       'Becoming seed node , clearing server list and waiting for connections'
     );
     assignedPartitions = [];
-    monitor.close();
     const ring = require('./leader');
     setTimeout(ring.createServer, process.env.TIME_TO_BECOME_SEED || 1000);
   } else {
-    monitor.close();
     seedNodeReconnection();
   }
 };
@@ -209,9 +209,16 @@ app.get('/partitions', (req, res) => {
   res.send(partitions());
 });
 
+let startMonitoring = () => {
+  let port = process.env.MONITORING_PORT || 9000;
+  monitor = app.listen(port);
+  log.info(`Server is monitorable at the port ${port}`);
+};
+
 module.exports = {
   createClient: createClient,
   defaultPartitioner: require('./partitioner').defaultPartitioner,
   ring: ringInfo,
+  startMonitoring: startMonitoring,
   partitions: partitions
 };

@@ -39,9 +39,7 @@ let addresses = [];
  * It will wait for client connections and will broadcast gossip info.
  */
 let createServer = () => {
-  let port = process.env.MONITORING_PORT || 9000;
-  app.listen(port);
-  log.info(`Server is monitorable at the port ${port}`);
+  log.info('Becoming leader...');
   var server = net.createServer(client => {
     client.setNoDelay(true);
     log.info(`New Client connected host ${JSON.stringify(client.address())}`);
@@ -142,8 +140,16 @@ app.get('/status', (req, res) => {
   res.send(ringInfo());
 });
 
+let startMonitoring = () => {
+  let port = process.env.MONITORING_PORT || 9000;
+  app.listen(port);
+  log.info(`Server is monitorable at the port ${port}`);
+};
+
 module.exports = {
   createServer: createServer,
   defaultPartitioner: partitioner.defaultPartitioner,
+  startMonitoring: startMonitoring,
   ring: ringInfo
 };
+
