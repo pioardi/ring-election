@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/pioardi/ring-election/badge.svg?branch=master)](https://coveralls.io/github/pioardi/ring-election?branch=master)
 [![Build Status](https://travis-ci.org/pioardi/ring-election.svg?branch=master)](https://travis-ci.org/pioardi/ring-election)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9eaceda32d104341879e3ece48595d1b)](https://www.codacy.com/app/alessandroardizio94/ring-election?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pioardi/ring-election&amp;utm_campaign=Badge_Grade)
-
+<a href="https://badge.fury.io/js/ring-election"><img src="https://badge.fury.io/js/ring-election.svg" alt="npm version" height="18"></a>
 
 <h2>Contents</h2>
 <a href="#overview">Overview</a><br>
@@ -41,6 +41,7 @@ If a node is added or removed from the cluster, the allocated partitions will be
 
 <strong>Distributed Scheduler</strong><br>
 Each Scheduler instance will work on the assigned partitions .<br>
+A real implementation of this use case is available here https://github.com/pioardi/hurricane-scheduler <br>
 ![Dynamic diagram](doc/Ring-Scheduler-Use-Case.jpg)
 
 
@@ -49,7 +50,10 @@ Each Scheduler instance will work on the assigned partitions .<br>
 
 ```javascript
 const ring = require('ring-election');
-ring.leader.createServer();
+let leader = ring.leader;
+leader.createServer();
+// if you want REST API as monitoring , invoke startMonitoring
+leader.startMonitoring();
 // to get ring info
 ring.leader.ring();
 // Your leader will be the coordinator.
@@ -58,7 +62,10 @@ ring.leader.ring();
 
 ```javascript
 const ring = require('ring-election');
-ring.follower.createClient();
+let follower = ring.follower;
+follower.createClient();
+// if you want REST API as monitoring , invoke startMonitoring
+follower.startMonitoring();
 // to get ring info
 ring.follower.ring();
 // to get assigned partitions
@@ -96,10 +103,8 @@ To monitor your cluster contact any node on the path /status (HTTP verb :  GET) 
 
 
 <h2 id="todo">TODO List </h2>
-Tag 1.0 and public on npm<br>
-Document use cases <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
-Tag 1.1 and public on npm<br>
+Tag 1.0 and public on npm<br>
 
 <h2 id="hld">High Level Diagram</h2>
 
