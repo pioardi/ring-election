@@ -69,6 +69,7 @@ let broadcastMessage = (addresses, msg) => {
   }
 };
 
+
 module.exports = {
   searchClient: searchClient,
   searchClientByPriority: searchClientByPriority,

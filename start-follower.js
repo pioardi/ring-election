@@ -1,2 +1,5 @@
 const follower = require('./ring/follower');
-follower.createClient();
+setTimeout(()=> {
+    follower.createClient();
+    follower.startMonitoring();
+},3000);

@@ -9,6 +9,8 @@ const partitioner = require('./partitioner');
 // --------------------- CONFIG ---------------------
 let log = require('./logger');
 let peerPort = process.env.PORT || 3000;
+let os = require('os');
+let hostname = os.hostname();
 // --------------------- CONFIG ---------------------
 
 const net = require('net');
@@ -58,11 +60,7 @@ let createServer = () => {
 };
 
 let clientDisconnected = client => {
-  log.info(
-    `A node is removed from the cluster ${
-      client.remoteAddress
-    }, waiting heart check to rebalance partitions`
-  );
+  log.info(`A node is removed from the cluster ${JSON.stringify(client.address())}, waiting heart check to rebalance partitions`);
 };
 
 // --------------------- CORE ---------------------
@@ -136,8 +134,18 @@ let ringInfo = () => {
 let express = require('express');
 let app = express();
 app.get('/status', (req, res) => {
-  log.info('Status request received');
-  res.send(ringInfo());
+  log.info('Leader status request received');
+  // return only needed info.
+  let response = ringInfo().map(node => ({
+    partitions: node.partitions,
+    hostname: node.hostname,
+    port: node.port,
+    id: node.id,
+    priority: node.priority
+  }));
+   // put yourself as leader into the cluster info.
+  response.push({partitions : [] , hostname: hostname , port: peerPort});
+  res.send(response);
 });
 
 let startMonitoring = () => {

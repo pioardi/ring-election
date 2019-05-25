@@ -99,7 +99,6 @@ To monitor your cluster contact any node on the path /status (HTTP verb :  GET) 
 Tag 1.0 and public on npm<br>
 Document use cases <br>
 Re-add a client in the cluster when it was removed and send an hearth beat <br>
-Retry leader reconnection <br>
 Tag 1.1 and public on npm<br>
 
 <h2 id="hld">High Level Diagram</h2>

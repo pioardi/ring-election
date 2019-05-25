@@ -13,6 +13,7 @@ let os = require('os');
 let hostname = os.hostname();
 let log = require('./logger');
 let monitor;
+let leaderConnected;
 // --------------------- CONFIG ---------------------
 
 const net = require('net');
@@ -55,13 +56,14 @@ if (process.env.SEED_NODES) {
 }
 
 let createClient = () => {
-
   let seedNode;
   seedNode = detectSeedNode();
 
-  if(!seedNode){
-    log.info('Unable to connect to any node into the cluster,you will become the leader!');
-    require('./leader').createServer();
+  if (!seedNode) {
+    log.info(
+      'Unable to connect to any node into the cluster,you will become the leader!'
+    );
+    startAsLeader();
     return;
   }
 
@@ -70,14 +72,26 @@ let createClient = () => {
       host: seedNode.split(':')[0],
       port: seedNode.split(':')[1]
     },
-    () => log.info('connected to server!')
+    () => {
+      leaderConnected = seedNode;
+      log.info(`connected to server! Leader node is ${seedNode}`);
+    }
   );
   client.setNoDelay(true);
   client.on('end', e => seedEndEvent(client, e));
   // TIP: for now avoid to handle the on error event
-  client.on('error' , e => seedErrorEvent(client,e,seedNode));
+  client.on('error', e => seedErrorEvent(client, e));
   client.on('data', data => peerMessageHandler(data, client));
   client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }));
+};
+
+let startAsLeader = () => {
+  monitor.close(() => {
+    log.info('Closing monitoring server started previously');
+    let leader = require('./leader');
+    leader.createServer();
+   leader.startMonitoring();
+  });
 };
 
 /**
@@ -147,9 +161,7 @@ let seedNodeReconnection = () => {
     .find(e => e.priority === 1)
     .subscribe(
       e => {
-        log.info(
-          `Find vice seed node with address ${e.hostname}`
-        );
+        log.info(`Find vice seed node with address ${e.hostname}`);
         setTimeout(createClient, process.env.TIME_TO_RECONNECT || 3000);
       },
       error => log.error(error),
@@ -171,8 +183,8 @@ let seedEndEvent = (client, err) => {
       'Becoming seed node , clearing server list and waiting for connections'
     );
     assignedPartitions = [];
-    const ring = require('./leader');
-    setTimeout(ring.createServer, process.env.TIME_TO_BECOME_SEED || 1000);
+
+    setTimeout(startAsLeader, process.env.TIME_TO_BECOME_SEED || 1000);
   } else {
     seedNodeReconnection();
   }
@@ -183,11 +195,10 @@ let seedEndEvent = (client, err) => {
  * @param {*} client , client disconnected
  * @param {*} e  , error
  */
-let seedErrorEvent = (client, e, seedNode) => {
+let seedErrorEvent = (client, e) => {
   log.error(JSON.stringify(e));
-  if (seedNode != 'localhost') createClient();
+  createClient();
 };
-
 
 // --------------------- MESSAGING ---------------------
 let ringInfo = () => {
@@ -201,8 +212,18 @@ let partitions = () => {
 let express = require('express');
 let app = express();
 app.get('/status', (req, res) => {
-  log.info('Status request received');
-  res.send(ringInfo());
+  log.info('Follower status request received');
+  // return only needed info.
+  let result = ringInfo().map(node => ({
+    partitions: node.partitions,
+    hostname: node.hostname,
+    port: node.port,
+    id: node.id,
+    priority: node.priority
+  }));
+  // adding the leader connected to.
+  result.push({ partitions : [] , hostname : leaderConnected.split(':')[0] , port : leaderConnected.split(':')[1]});
+  res.send(result);
 });
 app.get('/partitions', (req, res) => {
   log.info('Partitions request received');
