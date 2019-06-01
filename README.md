@@ -89,14 +89,14 @@ See examples folder for more advanced examples
 
 
 <h2 id="config"> Configuration </h2>
- PORT : The leader will start to listen on this port , default is 3000 <br>
- TIME_TO_RECONNECT: The time to wait for a follower when he has to connect to a new leader in ms , default is 3000 <br>
- HEARTH_BEAT_FREQUENCY: The frequency with which a hearth beat is performed by a follower , default is 1000 <br>
- HEARTH_BEAT_CHECK_FREQUENCY: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
- LOG_LEVEL: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.<br>
- NUM_PARTITIONS: Number of partitions to distribute across the cluster , default is 10. <br>
- SEED_NODES : hostnames of leader node comma separated, default is localhost <br>
- MONITORING_PORT : port to expose rest service for monitoring , default is 9000<br>
+ <strong>PORT</strong> : The leader will start to listen on this port , default is 3000 <br>
+  <strong>TIME_TO_RECONNECT</strong>: The time to wait for a follower when he has to connect to a new leader in ms , default is 3000 <br>
+  <strong>HEARTH_BEAT_FREQUENCY</strong>: The frequency with which a hearth beat is performed by a follower , default is 1000 <br>
+  <strong>HEARTH_BEAT_CHECK_FREQUENCY</strong>: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
+  <strong>LOG_LEVEL</strong>: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.<br>
+  <strong>NUM_PARTITIONS</strong>: Number of partitions to distribute across the cluster , default is 10. <br>
+  <strong>SEED_NODES</strong> : hostnames and ports of leader node comma separated, Ex . hostname1:port,hostname2:port <br>
+  <strong>MONITORING_PORT</strong> : port to expose rest service for monitoring , default is 9000<br>
 
 <h2 id="monitoring"> Monitoring API </h2>
 To monitor your cluster contact any node on the path /status (HTTP verb :  GET) or contact a follower node on /partitions (HTTP verb :  GET). <br>
