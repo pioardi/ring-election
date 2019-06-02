@@ -11,8 +11,22 @@
 <a href="#monitoring">Monitoring</a><br>
 <a href="#todo">Vision</a><br>
 <a href="#hld">High level design</a><br>
+<a href="#contribute">Contribute</a><br>
+<a href="#versioning">Versioning</a><br>
+<a href="#license">License</a><br>
 
 
+<h2 id="gs">Getting started</h2>
+<strong> Try it out ! </strong>
+
+```bash
+   docker image build -t ring-election .
+   docker-compose up
+```
+Check assigned partitions to local:9000/status or change the port to 9001/9002 <br>
+Try to stop and restart container and observe the behaviour.<br>
+If you want to develop new features or fix a bug you can do that without docker images , just configure environment variables correctly ( you can see them on [docker-compose.yaml] file) . <br>
+See <a href="#examples">Examples</a> section to know how to integrate this library and build some distributed ring on top of ring-election !!! <br>
 
 <h2 id="overview">Overview and rationale</h2>
 In modern systems it is often needed to distribute the application load to make the system scalable so that every data is processed by a single instance. <br>
@@ -110,4 +124,15 @@ Tag 1.0 and public on npm<br>
 
 ![Dynamic diagram](doc/Ring.jpg)
 
+
+<h2 id="contribute">How to contribute</h2>
+Take tasks from todo list, develop a new feature or fix a bug and do a pull request.
+<strong>How to run tests</strong>
+npm run test
+
+<h2 id="versioning">Versioning</h2>
+We use [SemVer](http://semver.org/) for versioning.
+
+<h2 id="license">License</h2>
+This project is licensed under the MIT License - see the [LICENSE.md] file for details
 
