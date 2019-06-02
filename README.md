@@ -131,7 +131,7 @@ Take tasks from todo list, develop a new feature or fix a bug and do a pull requ
 npm run test
 
 <h2 id="versioning">Versioning</h2>
-We use [SemVer](http://semver.org/) for versioning.
+We use (http://semver.org/) for versioning.
 
 <h2 id="license">License</h2>
 This project is licensed under the MIT License - see the [LICENSE.md] file for details
