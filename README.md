@@ -5,8 +5,10 @@
 <a href="https://badge.fury.io/js/ring-election"><img src="https://badge.fury.io/js/ring-election.svg" alt="npm version" height="18"></a>
 
 <h2>Contents</h2>
+<a href="#gs">Getting started</a><br>
 <a href="#overview">Overview</a><br>
-<a href="#examples">Examples </><br>
+<a href="#usecases">Use cases</a><br>
+<a href="#howto">How to integrate</><br>
 <a href="#config">Config</a><br>
 <a href="#monitoring">Monitoring</a><br>
 <a href="#todo">Vision</a><br>
@@ -50,8 +52,10 @@ If a node is added or removed from the cluster, the allocated partitions will be
 - High availability<br>
 - Concurrency between nodes in a cluster<br>
 - Automatic failover<br>
+   
+<h2 id="usecases">Use cases</h2>
 
-<strong>Use cases</strong>
+This section introduce you on what you can build on top of ring-election using it as driver/library. <br>
 
 <strong>Distributed Scheduler</strong><br>
 Each Scheduler instance will work on the assigned partitions .<br>
@@ -59,7 +63,11 @@ A real implementation of this use case is available here https://github.com/pioa
 ![Dynamic diagram](doc/Ring-Scheduler-Use-Case.jpg)
 
 
-<h2>Examples</h2>
+<strong>Distributed lock</strong><br>
+<strong>Distributed cache</strong><br>
+<strong>Distributed computing</strong><br>   
+
+<h2 id="howto">How to integrate as driver/library</h2>
 <strong>How to leader</strong><br>
 
 ```javascript
@@ -127,7 +135,7 @@ Tag 1.0 and public on npm<br>
 
 <h2 id="contribute">How to contribute</h2>
 Take tasks from todo list, develop a new feature or fix a bug and do a pull request.<br>
-<strong>How to run tests</strong>
+<strong>How to run tests</strong><br>
 npm run test
 
 <h2 id="versioning">Versioning</h2>
