@@ -23,7 +23,7 @@
 
 ```bash
    docker image build -t ring-election .
-   docker-compose up
+   docker-compose up 
 ```
 Check assigned partitions to local:9000/status or change the port to 9001/9002 <br>
 Try to stop and restart container and observe the behaviour.<br>
