@@ -126,7 +126,7 @@ Tag 1.0 and public on npm<br>
 
 
 <h2 id="contribute">How to contribute</h2>
-Take tasks from todo list, develop a new feature or fix a bug and do a pull request.
+Take tasks from todo list, develop a new feature or fix a bug and do a pull request.<br>
 <strong>How to run tests</strong>
 npm run test
 
