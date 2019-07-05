@@ -1,6 +1,6 @@
 {
   "name": "ring-election",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Leader and followers algorithm to make partitioning easy.",
   "main": "index.js",
   "engines": {
@@ -12,7 +12,11 @@
     "url": "git://github.com/pioardi/ring-election.git"
   },
   "keywords": [
-    "scalability" , "concurrency" , "distributed-systems","leader-election","partitioning"
+    "scalability",
+    "concurrency",
+    "distributed-systems",
+    "leader-election",
+    "partitioning"
   ],
   "scripts": {
     "start-leader": "node start-leader.js",
@@ -32,10 +36,11 @@
   "dependencies": {
     "@reactivex/rxjs": "^5.5.11",
     "compression": "^1.7.4",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
-    "winston": "^3.2.1",
-    "lodash" : "^4.17.11"
+    "lodash": "^4.17.11",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
@@ -45,6 +50,6 @@
     "mock-require": "^3.0.3",
     "nyc": "^14.0.0",
     "supertest": "^4.0.2",
-    "lodash" : "^4.17.11"
+    "lodash": "^4.17.11"
   }
 }

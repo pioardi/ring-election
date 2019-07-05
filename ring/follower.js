@@ -210,7 +210,9 @@ let partitions = () => {
 
 // --------------------- MONITORING ---------------------
 let express = require('express');
+let cors = require('cors');
 let app = express();
+app.use(cors());
 app.get('/status', (req, res) => {
   log.info('Follower status request received');
   // return only needed info.
