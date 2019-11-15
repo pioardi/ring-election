@@ -19,8 +19,7 @@
     "partitioning"
   ],
   "scripts": {
-    "start-leader": "node start-leader.js",
-    "start-follower": "node start-follower.js",
+    "start": "node start.js",
     "build": "npm install",
     "test": "nyc mocha --exit --timeout 10000 **/*test.js",
     "demontest": "nodemon --exec \"npm test\"",
