@@ -1,6 +1,6 @@
 {
   "name": "ring-election",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Leader and followers algorithm to make partitioning easy.",
   "main": "index.js",
   "engines": {
@@ -22,6 +22,7 @@
     "start": "node start.js",
     "build": "npm install",
     "test": "nyc mocha --exit --timeout 10000 **/*test.js",
+    "integration-test": "nyc mocha --exit --timeout 300000 **/*/integration/*.js",
     "demontest": "nodemon --exec \"npm test\"",
     "coverage": "nyc report --reporter=text-lcov --timeout 5000 **/*test.js | coveralls"
   },
@@ -50,6 +51,7 @@
     "mock-require": "^3.0.3",
     "nyc": "^14.0.0",
     "supertest": "^4.0.2",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "request": "2.88.0"
   }
 }

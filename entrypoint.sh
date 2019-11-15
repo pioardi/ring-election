@@ -1,3 +1,3 @@
 #!/bin/bash
 echo "Node start up"
-npm run start-leader
+npm run start
