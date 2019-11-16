@@ -4,28 +4,11 @@ const expect = require('expect');
 const request = require('request');
 var exec = require('child_process').exec;
 
-let shouldStartWell = (err, response, body, done, nodeNumber) => {
+function basicCheck(response, body,expectedPartitions,expectedNodes) {
   expect(response.statusCode).toBe(200);
   expect(body).toBeDefined();
   let resp = JSON.parse(body);
-  expect(resp.length).toBe(3);
-  // actually the leader has not assigned to any partition.
-  let leader = resp.find(node => node.partitions.length == 0);
-  expect(leader).toBeDefined();
-  // expect other two nodes to have 5 partitions assigned per each.
-  resp
-    .filter(node => node.partitions.length > 0)
-    .forEach(n => {
-      expect(n.partitions.length).toBe(5);
-    });
-  if (nodeNumber == 3) done();
-};
-
-let shouldReassignPartitions = (err, response, body, done, nodeNumber) => {
-  expect(response.statusCode).toBe(200);
-  expect(body).toBeDefined();
-  let resp = JSON.parse(body);
-  expect(resp.length).toBe(2);
+  expect(resp.length).toBe(expectedNodes);
   // actually the leader has not assigned to any partition.
   let leader = resp.find(node => node.partitions.length == 0);
   expect(leader).toBeDefined();
@@ -33,37 +16,34 @@ let shouldReassignPartitions = (err, response, body, done, nodeNumber) => {
   resp
     .filter(node => node.partitions.length > 0)
     .forEach(n => {
-      expect(n.partitions.length).toBe(10);
+      expect(n.partitions.length).toBe(expectedPartitions);
     });
+}
 
+
+let shouldStartWell = (err, response, body, done, nodeNumber) => {
+  basicCheck(response, body,5 , 3);
+  if (nodeNumber == 3) done();
+};
+
+let shouldReassignPartitions = (err, response, body, done, nodeNumber) => {
+  basicCheck(response, body , 10 , 2);
   // restart container
   if (nodeNumber == 2) {
     exec('docker container restart ring-election_node-2_1', error => {
-      if (!err) done();
-      else process.exit(error.code);
+      expect(error).toBeFalsy();
+      if (!error) done();
     });
   }
 };
 
 let shouldHandleLeaderFailure = (err, response, body, done, nodeNumber) => {
-  expect(response.statusCode).toBe(200);
-  expect(body).toBeDefined();
-  let resp = JSON.parse(body);
-  expect(resp.length).toBe(2);
-  // actually the leader has not assigned to any partition.
-  let leader = resp.find(node => node.partitions.length == 0);
-  expect(leader).toBeDefined();
-  // expect other node to have 10 partitions assigned per each.
-  resp
-    .filter(node => node.partitions.length > 0)
-    .forEach(n => {
-      expect(n.partitions.length).toBe(10);
-    });
+  basicCheck(response, body , 10 , 2);
   // restart container
   if (nodeNumber == 2) {
     exec('docker container restart ring-election_node-0_1', error => {
-      if (!err) done();
-      else process.exit(error.code);
+      expect(error).toBeFalsy();
+      if (!error) done();
     });
   }
 };
@@ -85,11 +65,11 @@ describe('Integration test', () => {
     exec('docker container stop ring-election_node-2_1', err => {
       expect(err).toBeFalsy();
       setTimeout(() => {
-        request('http://localhost:9000/status', (err, resp, body) => {
-          shouldReassignPartitions(err, resp, body, done, 1);
+        request('http://localhost:9000/status', (error, resp, body) => {
+          shouldReassignPartitions(error, resp, body, done, 1);
         });
-        request('http://localhost:9001/status', (err, resp, body) => {
-          shouldReassignPartitions(err, resp, body, done, 2);
+        request('http://localhost:9001/status', (error, resp, body) => {
+          shouldReassignPartitions(error, resp, body, done, 2);
         });
       }, 15000);
     });
