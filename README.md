@@ -24,7 +24,6 @@
 <strong> Try it out ! </strong>
 
 ```bash
-   docker image build -t ring-election .
    docker-compose up 
 ```
 Check assigned partitions to local:9000/status or change the port to 9001/9002 <br>
@@ -138,7 +137,14 @@ Tag 1.0 and public on npm<br>
 <h2 id="contribute">How to contribute</h2>
 Take tasks from todo list, develop a new feature or fix a bug and do a pull request.<br>
 <strong>How to run tests</strong><br>
-npm run test
+<strong>Unit tests </strong> <br>
+npm run test <br><br>
+<strong>Integration tests</strong><br>
+cd  test/integration <br>
+./integration.sh <br>
+npm run integration-test<br>
+
+
 
 <h2 id="versioning">Versioning</h2>
 We use (http://semver.org/) for versioning.
