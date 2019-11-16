@@ -38,9 +38,9 @@ let shouldReassignPartitions = (err, response, body, done, nodeNumber) => {
 
   // restart container
   if (nodeNumber == 2) {
-    exec('docker container restart ring-election_node-2_1', err => {
+    exec('docker container restart ring-election_node-2_1', error => {
       if (!err) done();
-      else console.error(err);
+      else process.exit(error.code);
     });
   }
 };
@@ -61,9 +61,9 @@ let shouldHandleLeaderFailure = (err, response, body, done, nodeNumber) => {
     });
   // restart container
   if (nodeNumber == 2) {
-    exec('docker container restart ring-election_node-0_1', err => {
+    exec('docker container restart ring-election_node-0_1', error => {
       if (!err) done();
-      else console.error(err);
+      else process.exit(error.code);
     });
   }
 };
@@ -101,19 +101,19 @@ describe('Integration test', () => {
       expect(err).toBeFalsy();
       setTimeout(() => {
         // another node must become the leader.
-        request('http://localhost:9001/status', (err, resp, body) => {
-          shouldHandleLeaderFailure(err, resp, body, done, 1);
+        request('http://localhost:9001/status', (error, resp, body) => {
+          shouldHandleLeaderFailure(error, resp, body, done, 1);
         });
-        request('http://localhost:9002/status', (err, resp, body) => {
-          shouldHandleLeaderFailure(err, resp, body, done, 2);
+        request('http://localhost:9002/status', (error, resp, body) => {
+          shouldHandleLeaderFailure(error, resp, body, done, 2);
         });
         // when leader is added again , it should be a follower
         setTimeout(() => {
-          request('http://localhost:9000/status', (err, resp, body) => {
-            shouldReassignPartitions(err, resp, body, done);
+          request('http://localhost:9000/status', (error, resp, body) => {
+            shouldReassignPartitions(error, resp, body, done);
           });
-          request('http://localhost:9001/status', (err, resp, body) => {
-            shouldReassignPartitions(err, resp, body, done);
+          request('http://localhost:9001/status', (error, resp, body) => {
+            shouldReassignPartitions(error, resp, body, done);
           });
           request('http://localhost:9002/status', (err, resp, body) => {
             shouldReassignPartitions(err, resp, body, done);
