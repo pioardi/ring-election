@@ -18,7 +18,7 @@ describe('Hearth beat', () => {
     setTimeout(() => {
       expect(count >= 10).toBeTruthy();
       done();
-    }, 20);
+    }, 200);
   });
 
   it('Should do an hearth check with correct frequency', done => {
@@ -33,6 +33,6 @@ describe('Hearth beat', () => {
     setTimeout(() => {
       expect(count).toBe(0);
       done();
-    }, 20);
+    }, 200);
   });
 });
