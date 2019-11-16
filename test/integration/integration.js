@@ -4,7 +4,7 @@ const expect = require('expect');
 const request = require('request');
 var exec = require('child_process').exec;
 
-function basicCheck(response, body,expectedPartitions,expectedNodes) {
+let basicCheck =(response, body,expectedPartitions,expectedNodes) => {
   expect(response.statusCode).toBe(200);
   expect(body).toBeDefined();
   let resp = JSON.parse(body);
@@ -18,7 +18,7 @@ function basicCheck(response, body,expectedPartitions,expectedNodes) {
     .forEach(n => {
       expect(n.partitions.length).toBe(expectedPartitions);
     });
-}
+};
 
 
 let shouldStartWell = (err, response, body, done, nodeNumber) => {
@@ -95,8 +95,8 @@ describe('Integration test', () => {
           request('http://localhost:9001/status', (error, resp, body) => {
             shouldReassignPartitions(error, resp, body, done);
           });
-          request('http://localhost:9002/status', (err, resp, body) => {
-            shouldReassignPartitions(err, resp, body, done);
+          request('http://localhost:9002/status', (error, resp, body) => {
+            shouldReassignPartitions(error, resp, body, done);
             done();
           });
         }, 10000);
