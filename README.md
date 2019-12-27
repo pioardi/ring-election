@@ -5,6 +5,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9eaceda32d104341879e3ece48595d1b)](https://www.codacy.com/app/alessandroardizio94/ring-election?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pioardi/ring-election&amp;utm_campaign=Badge_Grade)
 <a href="https://badge.fury.io/js/ring-election"><img src="https://badge.fury.io/js/ring-election.svg" alt="npm version" height="18"></a>
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ring-election)
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
 
 <h2>Contents </h2>
@@ -127,15 +128,16 @@ To monitor your cluster contact any node on the path /status (HTTP verb :  GET) 
 
 
 <h2 id="todo">TODO List </h2>
-Re-add a client in the cluster when it was removed and send an hearth beat <br>
-Tag 1.0 and public on npm<br>
 
+Re-add a client in the cluster when it was removed and send an hearth beat<br>
+Implement event emitter to notify library users when something happens
 <h2 id="hld">High Level Diagram</h2>
 
 ![Dynamic diagram](doc/Ring.jpg)
 
 
 <h2 id="contribute">How to contribute</h2>
+This repo use standard js style , please use it if you want to contribute <br>
 Take tasks from todo list, develop a new feature or fix a bug and do a pull request.<br>
 <strong>How to run tests</strong><br>
 <strong>Unit tests </strong> <br>
@@ -143,7 +145,12 @@ npm run test <br><br>
 <strong>Integration tests</strong><br>
 cd  test/integration <br>
 ./integration.sh <br>
-npm run integration-test<br>
+npm run integration-test<br> <br>
+<strong> How to check if your new code is standard style </strong><br>
+npm run standard <br> 
+If you want to lint your code run --> npm run lint
+
+
 
 
 

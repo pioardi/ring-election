@@ -4,31 +4,30 @@
  * @author Alessandro Pio Ardizio
  * @since 0.1
  */
-'use strict';
-const Rx = require('@reactivex/rxjs');
-const log = require('./logger');
-const util = require('./util');
-const numberOfPartitions = process.env.NUM_PARTITIONS || 10;
+'use strict'
+const Rx = require('@reactivex/rxjs')
+const log = require('./logger')
+const util = require('./util')
+const numberOfPartitions = process.env.NUM_PARTITIONS || 10
 
 /**
  * Default Partitioner is a round robin algorithm
  * @param {*} data  the data to insert.
  */
-let defaultPartitioner = data => {
-  return Math.abs(hashCode(data) % numberOfPartitions);
-};
+const defaultPartitioner = data => {
+  return Math.abs(hashCode(data) % numberOfPartitions)
+}
 
 /**
  *
  * @param {*} s a string or an object
  */
-let hashCode = key => {
-  var h = 0;
-  let s = key.toString();
-  for (var i = 0; i < s.length; i++)
-    h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
-  return h;
-};
+const hashCode = key => {
+  var h = 0
+  const s = key.toString()
+  for (var i = 0; i < s.length; i++) { h = (Math.imul(31, h) + s.charCodeAt(i)) | 0 }
+  return h
+}
 
 /**
  * Assign all partitions to one node.
@@ -36,9 +35,9 @@ let hashCode = key => {
  * @param {*} partitionsAssigned
  * @private
  */
-function assignAllPartitions(numOfPartitions, partitionsAssigned) {
+function assignAllPartitions (numOfPartitions, partitionsAssigned) {
   for (var i = 0; i < numOfPartitions; i++) {
-    partitionsAssigned.push(i);
+    partitionsAssigned.push(i)
   }
 }
 
@@ -49,7 +48,7 @@ function assignAllPartitions(numOfPartitions, partitionsAssigned) {
  * @param {Array} partitionsToRevoke
  * @private
  */
-function updateServers(
+function updateServers (
   addresses,
   partitionsToAssignForEachNode,
   partitionsToRevoke
@@ -57,23 +56,23 @@ function updateServers(
   Rx.Observable.from(addresses)
     .map(entry => {
       for (let i = 0; i < partitionsToAssignForEachNode; i++) {
-        let assignedPartition =
-          partitionsToRevoke[partitionsToRevoke.length - 1];
+        const assignedPartition =
+          partitionsToRevoke[partitionsToRevoke.length - 1]
         log.info(
           `Assigned partition number ${assignedPartition} to node ${
             entry.hostname
           }`
-        );
-        entry.partitions.push(partitionsToRevoke.pop());
+        )
+        entry.partitions.push(partitionsToRevoke.pop())
       }
       // update addresses
-      let i = addresses.findIndex(e => e.id == entry.id);
+      const i = addresses.findIndex(e => e.id === entry.id)
       if (i >= 0) {
-        addresses[i].partitions = entry.partitions;
+        addresses[i].partitions = entry.partitions
       }
-      return entry;
+      return entry
     })
-    .subscribe();
+    .subscribe()
 }
 
 /**
@@ -83,25 +82,25 @@ function updateServers(
  * @returns the partitions assigned.
  * @public
  */
-let assignPartitions = (client, addresses) => {
-  let partitionsAssigned = [];
-  let numberOfPartitions = process.env.NUM_PARTITIONS || 10;
-  let numberOfNodes = addresses.length;
-  let partitionsToAssign = Math.round(numberOfPartitions / (numberOfNodes + 1));
-  let partitionsToRevokeForEachNode = Math.round(
+const assignPartitions = (client, addresses) => {
+  const partitionsAssigned = []
+  const numberOfPartitions = process.env.NUM_PARTITIONS || 10
+  const numberOfNodes = addresses.length
+  const partitionsToAssign = Math.round(numberOfPartitions / (numberOfNodes + 1))
+  const partitionsToRevokeForEachNode = Math.round(
     partitionsToAssign / numberOfNodes
-  );
+  )
   if (addresses.length > 0) {
     Rx.Observable.from(addresses)
       .flatMap(entry => revokePartitions(entry, partitionsToRevokeForEachNode))
       .do(p => partitionsAssigned.push(p))
-      .subscribe();
+      .subscribe()
   } else {
     // assign all partitions
-    assignAllPartitions(numberOfPartitions, partitionsAssigned);
+    assignAllPartitions(numberOfPartitions, partitionsAssigned)
   }
-  return partitionsAssigned;
-};
+  return partitionsAssigned
+}
 
 /**
  * Revoke partitions assigned to client and split them to other nodes.
@@ -110,22 +109,22 @@ let assignPartitions = (client, addresses) => {
  * @public
  *
  */
-let rebalancePartitions = (client, addresses) => {
-  let host = util.searchClient(client, addresses);
+const rebalancePartitions = (client, addresses) => {
+  const host = util.searchClient(client, addresses)
   if (host) {
     // save partitions
-    let partitionsToRevoke = host.partitions;
-    log.debug(`Client disconnected ${host.hostname}`);
+    const partitionsToRevoke = host.partitions
+    log.debug(`Client disconnected ${host.hostname}`)
     // clean data structures
-    let indexToRemove = addresses.findIndex(e => e.id == host.id);
-    addresses.splice(indexToRemove, 1);
-    addresses.filter(e => e.priority > 1).forEach(e => e.priority--);
-    let partitionsToAssignForEachNode = Math.round(
+    const indexToRemove = addresses.findIndex(e => e.id === host.id)
+    addresses.splice(indexToRemove, 1)
+    addresses.filter(e => e.priority > 1).forEach(e => e.priority--)
+    const partitionsToAssignForEachNode = Math.round(
       partitionsToRevoke.length / addresses.length
-    );
-    updateServers(addresses, partitionsToAssignForEachNode, partitionsToRevoke);
+    )
+    updateServers(addresses, partitionsToAssignForEachNode, partitionsToRevoke)
   }
-};
+}
 
 /**
  *
@@ -134,22 +133,22 @@ let rebalancePartitions = (client, addresses) => {
  * @param {*} partitionsToRevokeForEachNode
  * @private
  */
-let revokePartitions = (host, partitionsToRevokeForEachNode) => {
+const revokePartitions = (host, partitionsToRevokeForEachNode) => {
   return Rx.Observable.create(observer => {
     for (let i = 0; i < partitionsToRevokeForEachNode; i++) {
-      let partitions = host.partitions;
-      let revokedPartition = partitions[partitions.length - 1];
+      const partitions = host.partitions
+      const revokedPartition = partitions[partitions.length - 1]
       log.info(
         `Revoked partition number ${revokedPartition} to node ${host.hostname}`
-      );
-      observer.next(partitions.pop());
+      )
+      observer.next(partitions.pop())
     }
-    observer.complete();
-  });
-};
+    observer.complete()
+  })
+}
 
 module.exports = {
   defaultPartitioner: defaultPartitioner,
   assignPartitions: assignPartitions,
   rebalancePartitions: rebalancePartitions
-};
+}
