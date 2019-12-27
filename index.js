@@ -5,5 +5,6 @@
 
 module.exports = {
   leader: require('./ring/leader'),
-  follower: require('./ring/follower')
+  follower: require('./ring/follower'),
+  constants: require('./ring/constants')
 }

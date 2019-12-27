@@ -78,3 +78,25 @@ describe('broadcastMessage', () => {
     expect(count).toBe(1)
   })
 })
+
+describe('checkDiff', () => {
+  it('Should return revoked partitions', () => {
+    const old = [1, 2, 3, 4, 5]
+    const assigned = [1, 2, 4, 6]
+    const diff = util.checkDiff(old, assigned)
+    expect(diff).toBeTruthy()
+    expect(diff.length).toBe(2)
+    expect(diff.includes(3)).toBeTruthy()
+    expect(diff.includes(5)).toBeTruthy()
+  })
+
+  it('Should return assigned partitions', () => {
+    const old = [1, 2, 3, 4, 5]
+    const assigned = [1, 2, 4, 6, 7]
+    const diff = util.checkDiff(assigned, old)
+    expect(diff).toBeTruthy()
+    expect(diff.length).toBe(2)
+    expect(diff.includes(6)).toBeTruthy()
+    expect(diff.includes(7)).toBeTruthy()
+  })
+})

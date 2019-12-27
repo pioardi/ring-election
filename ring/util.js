@@ -69,9 +69,28 @@ const broadcastMessage = (addresses, msg) => {
   }
 }
 
+/**
+ * @param {Array} first
+ * @param {Array} second
+ * @param {Array} diff the array to put changes, is optional
+ * @returns {Array} an array containing the elements into the first array but not into the second
+ */
+const checkDiff = (first, second, diff) => {
+  first.forEach(value => {
+    if (!second.includes(value)) {
+      if (!diff) {
+        diff = []
+      }
+      diff.push(value)
+    }
+  })
+  return diff
+}
+
 module.exports = {
   searchClient: searchClient,
   searchClientByPriority: searchClientByPriority,
   searchClientById: searchClientById,
-  broadcastMessage: broadcastMessage
+  broadcastMessage: broadcastMessage,
+  checkDiff: checkDiff
 }

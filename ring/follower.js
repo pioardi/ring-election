@@ -12,6 +12,7 @@
 const os = require('os')
 const hostname = os.hostname()
 const log = require('./logger')
+const eventEmitter = require('./eventEmitter')
 let monitor
 let leaderConnected
 // --------------------- CONFIG ---------------------
@@ -19,6 +20,7 @@ let leaderConnected
 const net = require('net')
 const hearthbeat = require('./hearthbeat')
 const Rx = require('@reactivex/rxjs')
+const { checkDiff } = require('./util')
 // node id in the ring.
 var id
 // priority to be elegible to be a seed node.
@@ -32,7 +34,10 @@ const {
   NODE_REMOVED,
   WELCOME,
   HOSTNAME,
-  MESSAGE_SEPARATOR
+  MESSAGE_SEPARATOR,
+  BECOME_LEADER,
+  PARTITIONS_ASSIGNED,
+  PARTITIONS_REVOKED
 } = require('./constants')
 // --------------------- CONSTANTS ---------------------
 
@@ -43,7 +48,7 @@ let addresses
 // --------------------- DS ---------------------
 
 // --------------------- CORE ---------------------
-const seedNodes = process.env.SEED_NODES.split(',') || ['localhost']
+const seedNodes = process.env.SEED_NODES ? process.env.SEED_NODES.split(',') : ['localhost']
 
 const createClient = () => {
   const seedNode = detectSeedNode()
@@ -80,6 +85,7 @@ const startAsLeader = () => {
     const leader = require('./leader')
     leader.createServer()
     leader.startMonitoring()
+    eventEmitter.emit(BECOME_LEADER)
   })
 }
 
@@ -116,29 +122,48 @@ const peerMessageHandler = (data, client) => {
       log.info(`Assigned partitions : ${jsonData.partitions}`)
       assignedPartitions = jsonData.partitions
       hearthbeat(client, id)
+      eventEmitter.emit(PARTITIONS_ASSIGNED, assignedPartitions)
     } else if (type === NODE_ADDED) {
       log.info('New node added in the cluster')
+      const oldPartitions = []
+      Object.assign(oldPartitions, assignedPartitions)
       addresses = msg
-      updatePartitionAssigned()
+      updatePartitionAssigned(oldPartitions)
     } else if (type === NODE_REMOVED) {
       if (priority > 1) priority--
       log.info(
         `A node was removed from the cluster , now my priority is ${priority}`
       )
+      const oldPartitions = []
+      Object.assign(oldPartitions, assignedPartitions)
       addresses = msg
-      updatePartitionAssigned()
+      updatePartitionAssigned(oldPartitions)
     }
     // handle all types of messages.
   })
 }
 
-const updatePartitionAssigned = () => {
+/**
+ * Update the partitions assigned to this node.
+ * Calculate the diff between old assigned partitions and new and emit the diff.
+ * @param {*Array} oldPartitions
+ */
+const updatePartitionAssigned = (oldPartitions) => {
   Rx.Observable.from(addresses)
     .find(a => a.id === id)
     .subscribe(e => {
       assignedPartitions = e.partitions
     })
-  log.info(`New partitions assigned ${assignedPartitions}`)
+
+  // check assigned and removed partitions
+  const revoked = checkDiff(oldPartitions, assignedPartitions)
+  const assigned = checkDiff(assignedPartitions, oldPartitions)
+  if (revoked) {
+    eventEmitter.emit(PARTITIONS_REVOKED, revoked)
+  }
+  if (assigned) {
+    eventEmitter.emit(PARTITIONS_ASSIGNED, assigned)
+  }
 }
 
 /**
@@ -232,5 +257,6 @@ module.exports = {
   defaultPartitioner: require('./partitioner').defaultPartitioner,
   ring: ringInfo,
   startMonitoring: startMonitoring,
-  partitions: partitions
+  partitions: partitions,
+  eventListener: eventEmitter
 }

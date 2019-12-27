@@ -86,20 +86,30 @@ ring.leader.ring();
 <strong>How to follower</strong><br>
 
 ```javascript
-const ring = require('ring-election');
-let follower = ring.follower;
-follower.createClient();
+const ring = require('ring-election')
+let follower = ring.follower
+const {
+  BECOME_LEADER,
+  PARTITIONS_ASSIGNED,
+  PARTITIONS_REVOKED
+} = ring.constants;
+follower.createClient()
 // if you want REST API as monitoring , invoke startMonitoring
-follower.startMonitoring();
+follower.startMonitoring()
 // to get ring info
-ring.follower.ring();
+ring.follower.ring()
 // to get assigned partitions
-let assignedPartitions = ring.follower.partitions();
+let assignedPartitions = ring.follower.partitions()
 // now let me assume that a follower will create some data
 // and you want to partition this data
-let partition = ring.follower.defaultPartitioner('KEY');
+let partition = ring.follower.defaultPartitioner('KEY')
 // save your data including the partition on a storage
 // you will be the only one in the cluster working on the partitions assigned to you.
+
+// If you want to handle partitions assigned ( use other constants to listen other events ) you can do in this way.
+ring.follower.eventListener.on(PARTITIONS_ASSIGNED , (newAssignedPartitions) => {
+   // DO STUFF
+})
 ```
 
 <strong> Try it out ! </strong>
