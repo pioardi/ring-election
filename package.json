@@ -19,7 +19,15 @@
     "partitioning",
     "utility",
     "library",
-    "standard"
+    "standard",
+    "javascript",
+    "javascript-library",
+    "cluster",
+    "election",
+    "replicas",
+    "distributed-lock",
+    "fault-tolerance",
+    "ring"
   ],
   "scripts": {
     "start": "node start.js",
