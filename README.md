@@ -32,12 +32,56 @@
 
 
 <h2 id="gs">Getting started</h2>
-<strong> Try it out ! </strong>
+<strong> Install with npm ! </strong>
 
 ```bash
-   docker-compose up 
+  npm i ring-election --save
 ```
+
+<strong>Example</strong>
+You do not need to choose a node as leader , just indicate all your nodes and start everyone as follower.<br>
+The first node to start will be the leader , the leader do not have assigned partitions so try to start 2 instances after your integration<br>
+
+<strong>How to integrate</strong><br>
+
+```javascript
+const ring = require('ring-election')
+let follower = ring.follower
+const {
+  BECOME_LEADER,
+  PARTITIONS_ASSIGNED,
+  PARTITIONS_REVOKED
+} = ring.constants;
+follower.createClient()
+// if you want REST API as monitoring , invoke startMonitoring
+follower.startMonitoring()
+// to get ring info
+ring.follower.ring()
+// to get assigned partitions
+let assignedPartitions = ring.follower.partitions()
+// now let me assume that a follower will create some data
+// and you want to partition this data
+let partition = ring.follower.defaultPartitioner('KEY')
+// save your data including the partition on a storage
+// you will be the only one in the cluster working on the partitions assigned to you.
+
+// If you want to handle partitions assigned
+// ( use other constants to listen other events ) you can do in this way.
+ring.follower.eventListener.on(PARTITIONS_ASSIGNED , (newAssignedPartitions) => {
+   // DO STUFF
+})
+```
+
+
+<strong>Try this to better understand the behaviour</strong>
+
+```bash
+  docker-compose up
+```
+
 Check assigned partitions to local:9000/status or change the port to 9001/9002 <br>
+
+
 Try to stop and restart container and observe the behaviour.<br>
 If you want to develop new features or fix a bug you can do that without docker images , just configure environment variables correctly ( you can see them on [docker-compose.yaml] file) . <br>
 See <a href="#examples">Examples</a> section to know how to integrate this library and build some distributed services on top of ring-election !!! <br>
@@ -79,47 +123,7 @@ A real implementation of this use case is available here https://github.com/pioa
 <strong>Distributed cache</strong><br>
 <strong>Distributed computing</strong><br>   
 
-<h2 id="howto">How to integrate as driver/library</h2>
-<strong>How to leader</strong><br>
 
-```javascript
-const ring = require('ring-election');
-let leader = ring.leader;
-leader.createServer();
-// if you want REST API as monitoring , invoke startMonitoring
-leader.startMonitoring();
-// to get ring info
-ring.leader.ring();
-// Your leader will be the coordinator.
-```
-<strong>How to follower</strong><br>
-
-```javascript
-const ring = require('ring-election')
-let follower = ring.follower
-const {
-  BECOME_LEADER,
-  PARTITIONS_ASSIGNED,
-  PARTITIONS_REVOKED
-} = ring.constants;
-follower.createClient()
-// if you want REST API as monitoring , invoke startMonitoring
-follower.startMonitoring()
-// to get ring info
-ring.follower.ring()
-// to get assigned partitions
-let assignedPartitions = ring.follower.partitions()
-// now let me assume that a follower will create some data
-// and you want to partition this data
-let partition = ring.follower.defaultPartitioner('KEY')
-// save your data including the partition on a storage
-// you will be the only one in the cluster working on the partitions assigned to you.
-
-// If you want to handle partitions assigned ( use other constants to listen other events ) you can do in this way.
-ring.follower.eventListener.on(PARTITIONS_ASSIGNED , (newAssignedPartitions) => {
-   // DO STUFF
-})
-```
 
 <strong> Try it out ! </strong>
 ```bash
@@ -127,16 +131,11 @@ ring.follower.eventListener.on(PARTITIONS_ASSIGNED , (newAssignedPartitions) => 
    docker-compose up
 ```
 
- 
-See examples folder for more advanced examples
-
-
-
 <h2 id="config"> Configuration </h2>
  <strong>PORT</strong> : The leader will start to listen on this port , default is 3000 <br>
-  <strong>TIME_TO_RECONNECT</strong>: The time to wait for a follower when he has to connect to a new leader in ms , default is 3000 <br>
-  <strong>HEARTH_BEAT_FREQUENCY</strong>: The frequency with which a hearth beat is performed by a follower , default is 1000 <br>
-  <strong>HEARTH_BEAT_CHECK_FREQUENCY</strong>: The frequency with which an hearth check is performed by a leader , default is 3000 <br>
+  <strong>TIME_TO_RECONNECT</strong>: The time to wait for a follower when he has to connect to a new leader in ms , default is 3000ms <br>
+  <strong>HEARTH_BEAT_FREQUENCY</strong>: The frequency with which a hearth beat is performed by a follower , default is 1000ms <br>
+  <strong>HEARTH_BEAT_CHECK_FREQUENCY</strong>: The frequency with which an hearth check is performed by a leader , default is 3000ms <br>
   <strong>LOG_LEVEL</strong>: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.<br>
   <strong>NUM_PARTITIONS</strong>: Number of partitions to distribute across the cluster , default is 10. <br>
   <strong>SEED_NODES</strong> : hostnames and ports of leader node comma separated, Ex . hostname1:port,hostname2:port <br>
