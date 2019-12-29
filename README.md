@@ -1,6 +1,6 @@
 # Ring election
 
-<div align="center">
+<div align="left">
    <img src="doc/logo.png" width="300" height="250"/>
 </div>
 
