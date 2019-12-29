@@ -1,5 +1,7 @@
 # Ring election
 
+<strong>Is your dream to build a service like cassandra,kafka,zipkin,jaeger,redis,etc...? You are in the right place , join ring-election project !!! </strong> <br>
+
 <div align="left">
    <img src="doc/logo.png" width="300" height="250"/>
 </div>
@@ -11,6 +13,7 @@
 <a href="https://badge.fury.io/js/ring-election"><img src="https://badge.fury.io/js/ring-election.svg" alt="npm version" height="18"></a>
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ring-election)<br>
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+
 
 
 
@@ -37,7 +40,7 @@
 Check assigned partitions to local:9000/status or change the port to 9001/9002 <br>
 Try to stop and restart container and observe the behaviour.<br>
 If you want to develop new features or fix a bug you can do that without docker images , just configure environment variables correctly ( you can see them on [docker-compose.yaml] file) . <br>
-See <a href="#examples">Examples</a> section to know how to integrate this library and build some distributed ring on top of ring-election !!! <br>
+See <a href="#examples">Examples</a> section to know how to integrate this library and build some distributed services on top of ring-election !!! <br>
 
 <h2 id="overview">Overview and rationale</h2>
 In modern systems it is often needed to distribute the application load to make the system scalable so that every data is processed by a single instance. <br>
