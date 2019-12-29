@@ -21,7 +21,6 @@
 <a href="#gs">Getting started</a><br>
 <a href="#overview">Overview</a><br>
 <a href="#usecases">Use cases</a><br>
-<a href="#howto">How to integrate</><br>
 <a href="#config">Config</a><br>
 <a href="#monitoring">Monitoring</a><br>
 <a href="#todo">Vision</a><br>
@@ -84,8 +83,6 @@ Check assigned partitions to local:9000/status or change the port to 9001/9002 <
 
 Try to stop and restart container and observe the behaviour.<br>
 If you want to develop new features or fix a bug you can do that without docker images , just configure environment variables correctly ( you can see them on [docker-compose.yaml] file) . <br>
-See <a href="#examples">Examples</a> section to know how to integrate this library and build some distributed services on top of ring-election !!! <br>
-
 <h2 id="overview">Overview and rationale</h2>
 In modern systems it is often needed to distribute the application load to make the system scalable so that every data is processed by a single instance. <br>
 Ring-election is a driver that implements a distributed algorithm that assigns to each node the partitions to work on .
