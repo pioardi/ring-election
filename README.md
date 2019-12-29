@@ -1,4 +1,9 @@
 # Ring election
+
+<div align="center">
+   <img src="doc/logo.png" width="300" height="250"/>
+</div>
+
 [![Coverage Status](https://coveralls.io/repos/github/pioardi/ring-election/badge.svg?branch=master)](https://coveralls.io/github/pioardi/ring-election?branch=master)
 [![Build Status](https://travis-ci.org/pioardi/ring-election.svg?branch=master)](https://travis-ci.org/pioardi/ring-election)
 [![Actions Status](https://github.com/pioardi/ring-election/workflows/Node%20CI/badge.svg)](https://github.com/pioardi/ring-election/actions)
