@@ -1,9 +1,10 @@
 /**
  * Used to expose functions and objects.
  */
-'use strict';
+'use strict'
 
 module.exports = {
-   leader: require('./ring/leader'),
-   follower: require('./ring/follower')
-}; 
+  leader: require('./ring/leader'),
+  follower: require('./ring/follower'),
+  constants: require('./ring/constants')
+}

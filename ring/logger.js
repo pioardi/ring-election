@@ -5,9 +5,9 @@
  * @author Alessandro Pio Ardizio
  * @since 0.1
  */
-'use strict';
-const winston = require('winston');
-const { timestamp, combine, json } = winston.format;
+'use strict'
+const winston = require('winston')
+const { timestamp, combine, json } = winston.format
 
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
@@ -21,7 +21,7 @@ const logger = winston.createLogger({
     }),
     new winston.transports.File({ filename: 'bully.log' })
   ]
-});
+})
 
 // if in dev environment , log to console.
 if (process.env.NODE_ENV === 'dev') {
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'dev') {
     new winston.transports.Console({
       format: combine(json(), timestamp())
     })
-  );
+  )
 }
 
-module.exports = logger;
+module.exports = logger

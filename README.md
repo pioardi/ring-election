@@ -1,9 +1,17 @@
 # Ring election
+
+<div align="left">
+   <img src="doc/logo.png" width="300" height="250"/>
+</div>
+
 [![Coverage Status](https://coveralls.io/repos/github/pioardi/ring-election/badge.svg?branch=master)](https://coveralls.io/github/pioardi/ring-election?branch=master)
 [![Build Status](https://travis-ci.org/pioardi/ring-election.svg?branch=master)](https://travis-ci.org/pioardi/ring-election)
+[![Actions Status](https://github.com/pioardi/ring-election/workflows/Node%20CI/badge.svg)](https://github.com/pioardi/ring-election/actions)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9eaceda32d104341879e3ece48595d1b)](https://www.codacy.com/app/alessandroardizio94/ring-election?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pioardi/ring-election&amp;utm_campaign=Badge_Grade)
 <a href="https://badge.fury.io/js/ring-election"><img src="https://badge.fury.io/js/ring-election.svg" alt="npm version" height="18"></a>
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ring-election)
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ring-election)<br>
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+
 
 
 <h2>Contents </h2>
@@ -84,20 +92,30 @@ ring.leader.ring();
 <strong>How to follower</strong><br>
 
 ```javascript
-const ring = require('ring-election');
-let follower = ring.follower;
-follower.createClient();
+const ring = require('ring-election')
+let follower = ring.follower
+const {
+  BECOME_LEADER,
+  PARTITIONS_ASSIGNED,
+  PARTITIONS_REVOKED
+} = ring.constants;
+follower.createClient()
 // if you want REST API as monitoring , invoke startMonitoring
-follower.startMonitoring();
+follower.startMonitoring()
 // to get ring info
-ring.follower.ring();
+ring.follower.ring()
 // to get assigned partitions
-let assignedPartitions = ring.follower.partitions();
+let assignedPartitions = ring.follower.partitions()
 // now let me assume that a follower will create some data
 // and you want to partition this data
-let partition = ring.follower.defaultPartitioner('KEY');
+let partition = ring.follower.defaultPartitioner('KEY')
 // save your data including the partition on a storage
 // you will be the only one in the cluster working on the partitions assigned to you.
+
+// If you want to handle partitions assigned ( use other constants to listen other events ) you can do in this way.
+ring.follower.eventListener.on(PARTITIONS_ASSIGNED , (newAssignedPartitions) => {
+   // DO STUFF
+})
 ```
 
 <strong> Try it out ! </strong>
@@ -126,15 +144,16 @@ To monitor your cluster contact any node on the path /status (HTTP verb :  GET) 
 
 
 <h2 id="todo">TODO List </h2>
-Re-add a client in the cluster when it was removed and send an hearth beat <br>
-Tag 1.0 and public on npm<br>
 
+Re-add a client in the cluster when it was removed and send an hearth beat<br>
+Implement event emitter to notify library users when something happens
 <h2 id="hld">High Level Diagram</h2>
 
 ![Dynamic diagram](doc/Ring.jpg)
 
 
 <h2 id="contribute">How to contribute</h2>
+This repo use standard js style , please use it if you want to contribute <br>
 Take tasks from todo list, develop a new feature or fix a bug and do a pull request.<br>
 <strong>How to run tests</strong><br>
 <strong>Unit tests </strong> <br>
@@ -142,7 +161,12 @@ npm run test <br><br>
 <strong>Integration tests</strong><br>
 cd  test/integration <br>
 ./integration.sh <br>
-npm run integration-test<br>
+npm run integration-test<br> <br>
+<strong> How to check if your new code is standard style </strong><br>
+npm run standard <br> 
+If you want to lint your code run --> npm run lint
+
+
 
 
 
@@ -151,4 +175,3 @@ We use (http://semver.org/) for versioning.
 
 <h2 id="license">License</h2>
 This project is licensed under the MIT License - see the [LICENSE.md] file for details
-

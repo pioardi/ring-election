@@ -3,19 +3,19 @@
  * @author Alessandro Pio Ardizio
  * @since 0.1
  */
-'use strict';
+'use strict'
 
-const partitioner = require('./partitioner');
+const partitioner = require('./partitioner')
 // --------------------- CONFIG ---------------------
-let log = require('./logger');
-let peerPort = process.env.PORT || 3000;
-let os = require('os');
-let hostname = os.hostname();
+const log = require('./logger')
+const peerPort = process.env.PORT || 3000
+const os = require('os')
+const hostname = os.hostname()
 // --------------------- CONFIG ---------------------
 
-const net = require('net');
-const util = require('./util');
-const hearthbeatCheck = require('./hearthcheck');
+const net = require('net')
+const util = require('./util')
+const hearthbeatCheck = require('./hearthcheck')
 
 // --------------------- CONSTANTS ---------------------
 const {
@@ -24,15 +24,15 @@ const {
   WELCOME,
   HOSTNAME,
   MESSAGE_SEPARATOR
-} = require('./constants');
+} = require('./constants')
 // --------------------- CONSTANTS ---------------------
 
 // --------------------- DS ---------------------
 /** mantain for each peer the last hearth beat. */
-let hearth = new Map();
+const hearth = new Map()
 /** Used for reconnection when a seed node die. */
 /* Addresses will be an array so that is more simple to exchange it as object during socket communication */
-let addresses = [];
+const addresses = []
 // --------------------- DS ---------------------
 
 // --------------------- CORE ---------------------
@@ -40,62 +40,62 @@ let addresses = [];
  * Create seed node server.
  * It will wait for client connections and will broadcast gossip info.
  */
-let createServer = () => {
-  log.info('Becoming leader...');
+const createServer = () => {
+  log.info('Becoming leader...')
   var server = net.createServer(client => {
-    client.setNoDelay(true);
-    log.info(`New Client connected host ${JSON.stringify(client.address())}`);
+    client.setNoDelay(true)
+    log.info(`New Client connected host ${JSON.stringify(client.address())}`)
     // client termination handling.
-    client.on('end', () => clientDisconnected(client));
-    client.on('error', e => log.error(`client error ${e}`));
+    client.on('end', () => clientDisconnected(client))
+    client.on('error', e => log.error(`client error ${e}`))
     // data received.
-    client.on('data', data => peerMessageHandler(data, client));
+    client.on('data', data => peerMessageHandler(data, client))
     // put client connection in the map , and assign partitions.
-  });
-  hearthbeatCheck(hearth, addresses);
-  server.listen(peerPort, function() {
-    log.info('server is listening');
-  });
-  return server;
-};
+  })
+  hearthbeatCheck(hearth, addresses)
+  server.listen(peerPort, function () {
+    log.info('server is listening')
+  })
+  return server
+}
 
-let clientDisconnected = client => {
-  log.info(`A node is removed from the cluster ${JSON.stringify(client.address())}, waiting heart check to rebalance partitions`);
-};
+const clientDisconnected = client => {
+  log.info(`A node is removed from the cluster ${JSON.stringify(client.address())}, waiting heart check to rebalance partitions`)
+}
 
 // --------------------- CORE ---------------------
 
 // --------------------- MESSAGING ---------------------
 
-let peerMessageHandler = (data, client) => {
-  let stringData = data.toString();
-  let arrayData = stringData.split(MESSAGE_SEPARATOR);
+const peerMessageHandler = (data, client) => {
+  const stringData = data.toString()
+  const arrayData = stringData.split(MESSAGE_SEPARATOR)
 
   arrayData.forEach(e => {
-    if (e.length <= 0) return;
-    let jsonData = JSON.parse(e);
-    let type = jsonData.type;
-    log.debug(`Receveid a message with type ${type}`);
-    let msg = jsonData.msg;
+    if (e.length <= 0) return
+    const jsonData = JSON.parse(e)
+    const type = jsonData.type
+    log.debug(`Receveid a message with type ${type}`)
+    const msg = jsonData.msg
     if (type === HEARTH_BEAT) {
-      hearth.set(jsonData.id, Date.now());
+      hearth.set(jsonData.id, Date.now())
     } else if (type === HOSTNAME) {
-      clientHostname(client, msg);
+      clientHostname(client, msg)
     }
     // handle all types of messages.
-  });
-};
+  })
+}
 
 /**
  *  After the server get the hostname , it will send a welcome message to the client.
  * @param {*} client client connected
  * @param {*} hostname  hostname of the client
  */
-let clientHostname = (client, hostname) => {
-  let priority = addresses.length + 1;
-  let cliendId = generateID();
-  let assignedPartitions = partitioner.assignPartitions(client, addresses);
-  hearth.set(cliendId, Date.now());
+const clientHostname = (client, hostname) => {
+  const priority = addresses.length + 1
+  const cliendId = generateID()
+  const assignedPartitions = partitioner.assignPartitions(client, addresses)
+  hearth.set(cliendId, Date.now())
   addresses.push({
     client: client,
     hostname: hostname,
@@ -103,64 +103,63 @@ let clientHostname = (client, hostname) => {
     id: cliendId,
     partitions: assignedPartitions,
     priority: priority
-  });
-  let welcome = {
+  })
+  const welcome = {
     type: WELCOME,
     msg: addresses,
     id: cliendId,
     priority: priority,
     partitions: assignedPartitions
-  };
+  }
   // sent ring info to the new peer.
-  client.write(JSON.stringify(welcome) + MESSAGE_SEPARATOR);
-  util.broadcastMessage(addresses, { type: NODE_ADDED, msg: addresses });
-};
+  client.write(JSON.stringify(welcome) + MESSAGE_SEPARATOR)
+  util.broadcastMessage(addresses, { type: NODE_ADDED, msg: addresses })
+}
 
 // --------------------- MESSAGING ---------------------
 /**
  * Return an id to be associated to a node.
  */
-let generateID = () => {
+const generateID = () => {
   return Math.random()
     .toString(36)
-    .substring(7);
-};
+    .substring(7)
+}
 
-let ringInfo = () => {
-  return addresses;
-};
+const ringInfo = () => {
+  return addresses
+}
 
 // --------------------- MONITORING ---------------------
-let express = require('express');
-let cors = require('cors');
-let app = express();
-app.use(cors());
+const express = require('express')
+const cors = require('cors')
+const app = express()
+app.use(cors())
 
 app.get('/status', (req, res) => {
-  log.info('Leader status request received');
+  log.info('Leader status request received')
   // return only needed info.
-  let response = ringInfo().map(node => ({
+  const response = ringInfo().map(node => ({
     partitions: node.partitions,
     hostname: node.hostname,
     port: node.port,
     id: node.id,
     priority: node.priority
-  }));
-   // put yourself as leader into the cluster info.
-  response.push({partitions : [] , hostname: hostname , port: peerPort});
-  res.send(response);
-});
+  }))
+  // put yourself as leader into the cluster info.
+  response.push({ partitions: [], hostname: hostname, port: peerPort })
+  res.send(response)
+})
 
-let startMonitoring = () => {
-  let port = process.env.MONITORING_PORT || 9000;
-  app.listen(port);
-  log.info(`Server is monitorable at the port ${port}`);
-};
+const startMonitoring = () => {
+  const port = process.env.MONITORING_PORT || 9000
+  app.listen(port)
+  log.info(`Server is monitorable at the port ${port}`)
+}
 
 module.exports = {
   createServer: createServer,
   defaultPartitioner: partitioner.defaultPartitioner,
   startMonitoring: startMonitoring,
   ring: ringInfo
-};
-
+}

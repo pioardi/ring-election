@@ -12,5 +12,4 @@ echo "\nDocker image built , start cluster..."
 docker-compose up -d
 echo "Waiting"
 sleep 15
-
-
+npm run integration-test
