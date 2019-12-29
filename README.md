@@ -152,25 +152,12 @@ Implement event emitter to notify library users when something happens
 
 
 <h2 id="contribute">How to contribute</h2>
-This repo use standard js style , please use it if you want to contribute <br>
-Take tasks from todo list, develop a new feature or fix a bug and do a pull request.<br>
-<strong>How to run tests</strong><br>
-<strong>Unit tests </strong> <br>
-npm run test <br><br>
-<strong>Integration tests</strong><br>
-cd  test/integration <br>
-./integration.sh <br>
-npm run integration-test<br> <br>
-<strong> How to check if your new code is standard style </strong><br>
-npm run standard <br> 
-If you want to lint your code run --> npm run lint
 
-
-
+See contributing guidelines [CONTRIBUTING](./CONTRIBUTING.md)
 
 
 <h2 id="versioning">Versioning</h2>
 We use (http://semver.org/) for versioning.
 
 <h2 id="license">License</h2>
-This project is licensed under the MIT License - see the [LICENSE.md] file for details
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details
