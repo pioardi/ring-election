@@ -148,8 +148,7 @@ Re-add a client in the cluster when it was removed and send an hearth beat<br>
 Implement event emitter to notify library users when something happens
 <h2 id="hld">High Level Diagram</h2>
 
-![Dynamic diagram](doc/Ring.jpg)
-
+See <a href="https://github.com/pioardi/ring-election/wiki/How-work-under-the-hood">wiki</a> page.
 
 <h2 id="contribute">How to contribute</h2>
 
