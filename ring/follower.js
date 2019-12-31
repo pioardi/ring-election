@@ -18,7 +18,7 @@ let leaderConnected
 // --------------------- CONFIG ---------------------
 
 const net = require('net')
-const hearthbeat = require('./hearthbeat')
+const heartbeat = require('./heartbeat')
 const Rx = require('@reactivex/rxjs')
 const { checkDiff } = require('./util')
 // node id in the ring.
@@ -121,7 +121,7 @@ const peerMessageHandler = (data, client) => {
       log.info(`Id in the ring ${id} , priority in the ring ${priority}`)
       log.info(`Assigned partitions : ${jsonData.partitions}`)
       assignedPartitions = jsonData.partitions
-      hearthbeat(client, id)
+      heartbeat(client, id)
       eventEmitter.emit(PARTITIONS_ASSIGNED, assignedPartitions)
     } else if (type === NODE_ADDED) {
       log.info('New node added in the cluster')

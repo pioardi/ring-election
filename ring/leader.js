@@ -15,12 +15,12 @@ const hostname = os.hostname()
 
 const net = require('net')
 const util = require('./util')
-const hearthbeatCheck = require('./hearthcheck')
+const heartbeatCheck = require('./heartcheck')
 
 // --------------------- CONSTANTS ---------------------
 const {
   NODE_ADDED,
-  HEARTH_BEAT,
+  HEART_BEAT,
   WELCOME,
   HOSTNAME,
   MESSAGE_SEPARATOR
@@ -28,8 +28,8 @@ const {
 // --------------------- CONSTANTS ---------------------
 
 // --------------------- DS ---------------------
-/** mantain for each peer the last hearth beat. */
-const hearth = new Map()
+/** mantain for each peer the last heart beat. */
+const heart = new Map()
 /** Used for reconnection when a seed node die. */
 /* Addresses will be an array so that is more simple to exchange it as object during socket communication */
 const addresses = []
@@ -52,7 +52,7 @@ const createServer = () => {
     client.on('data', data => peerMessageHandler(data, client))
     // put client connection in the map , and assign partitions.
   })
-  hearthbeatCheck(hearth, addresses)
+  heartbeatCheck(heart, addresses)
   server.listen(peerPort, function () {
     log.info('server is listening')
   })
@@ -77,8 +77,8 @@ const peerMessageHandler = (data, client) => {
     const type = jsonData.type
     log.debug(`Receveid a message with type ${type}`)
     const msg = jsonData.msg
-    if (type === HEARTH_BEAT) {
-      hearth.set(jsonData.id, Date.now())
+    if (type === HEART_BEAT) {
+      heart.set(jsonData.id, Date.now())
     } else if (type === HOSTNAME) {
       clientHostname(client, msg)
     }
@@ -95,7 +95,7 @@ const clientHostname = (client, hostname) => {
   const priority = addresses.length + 1
   const cliendId = generateID()
   const assignedPartitions = partitioner.assignPartitions(client, addresses)
-  hearth.set(cliendId, Date.now())
+  heart.set(cliendId, Date.now())
   addresses.push({
     client: client,
     hostname: hostname,
