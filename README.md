@@ -76,7 +76,8 @@ ring.follower.eventListener.on(PARTITIONS_ASSIGNED , (newAssignedPartitions) => 
 
 You will find some helpful files into the dev folder , please see the following video <br>
 
-![](doc/dev.gif)
+[Watch the video](https://www.youtube.com/embed/5keF_OVXGLM?controls=0)
+
 
 Check assigned partitions to local:9000/status or change the port to 9001/9002 <br>
 
