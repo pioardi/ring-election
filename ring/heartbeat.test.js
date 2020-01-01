@@ -1,11 +1,11 @@
 const expect = require('expect')
-process.env.HEARTH_BEAT_FREQUENCY = 1
+process.env.HEART_BEAT_FREQUENCY = 1
 const mock = require('mock-require')
 mock.stopAll()
-const hearthbeat = mock.reRequire('../ring/hearthbeat')
+const heartbeat = mock.reRequire('../ring/heartbeat')
 
-describe('Hearth beat', () => {
-  it('Should send an hearth beat with correct frequency', done => {
+describe('Heart beat', () => {
+  it('Should send an heart beat with correct frequency', done => {
     let count = 0
     /* es-lint-disable no-unused-expressions */
     const client = {
@@ -15,14 +15,14 @@ describe('Hearth beat', () => {
       writable: true
     }
     /* es-lint-enable no-unused-expressions */
-    hearthbeat(client, 'asdl')
+    heartbeat(client, 'asdl')
     setTimeout(() => {
       expect(count >= 10).toBeTruthy()
       done()
     }, 200)
   })
 
-  it('Should do an hearth check with correct frequency', done => {
+  it('Should do an heart check with correct frequency', done => {
     let count = 0
     const client = {
       write: () => {
@@ -30,7 +30,7 @@ describe('Hearth beat', () => {
       },
       writable: false
     }
-    hearthbeat(client, 'asdl')
+    heartbeat(client, 'asdl')
     setTimeout(() => {
       expect(count).toBe(0)
       done()
