@@ -1,9 +1,9 @@
 const expect = require('expect')
-process.env.HEARTH_BEAT_CHECK_FREQUENCY = 1
+process.env.HEART_BEAT_CHECK_FREQUENCY = 1
 process.env.MAX_INACTIVE_TIME = 3
 const mock = require('mock-require')
 
-describe('Hearth check', () => {
+describe('Heart check', () => {
   it('Should be ok if no nodes are present in the ring', done => {
     let count = 0
     mock.reRequire('../ring/logger')
@@ -12,8 +12,8 @@ describe('Hearth check', () => {
         count++
       }
     })
-    const hearthcheck = mock.reRequire('../ring/hearthcheck')
-    hearthcheck(new Map(), [])
+    const heartcheck = mock.reRequire('../ring/heartcheck')
+    heartcheck(new Map(), [])
     setTimeout(() => {
       expect(count > 1).toBeTruthy()
       clearInterval()
@@ -21,7 +21,7 @@ describe('Hearth check', () => {
     }, 20)
   })
 
-  it('Should do an hearth check with correct frequency and remove nodes if needed', done => {
+  it('Should do an heart check with correct frequency and remove nodes if needed', done => {
     let count = 0
     mock.stopAll()
     mock('../ring/partitioner', {
@@ -29,7 +29,7 @@ describe('Hearth check', () => {
         count++
       }
     })
-    const hearthcheck = mock.reRequire('../ring/hearthcheck')
+    const heartcheck = mock.reRequire('../ring/heartcheck')
     const ds = []
     ds.push({
       id: 'asdl',
@@ -37,9 +37,9 @@ describe('Hearth check', () => {
         write: () => {}
       }
     })
-    const hearth = new Map()
-    hearth.set('asdl', new Date())
-    hearthcheck(hearth, ds)
+    const heart = new Map()
+    heart.set('asdl', new Date())
+    heartcheck(heart, ds)
     setTimeout(() => {
       clearInterval()
       expect(count).toBe(1)

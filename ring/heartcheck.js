@@ -7,39 +7,39 @@
 'use strict'
 const log = require('./logger')
 const Rx = require('@reactivex/rxjs')
-/** max time to wait for an hearthbeat(in ms) */
+/** max time to wait for an heartbeat(in ms) */
 const maxInactiveTime = process.env.MAX_INACTIVE_TIME || 10000
 /** frequency to check if nodes are alive(in ms) */
-const hearthbeatCheckFrequency =
-  process.env.HEARTH_BEAT_CHECK_FREQUENCY || 3000
+const heartbeatCheckFrequency =
+  process.env.HEART_BEAT_CHECK_FREQUENCY || 3000
 const partitioner = require('./partitioner')
 const util = require('./util')
 const { NODE_REMOVED } = require('./constants')
-// --------------------- HEARTH ---------------------
+// --------------------- HEART ---------------------
 /**
  * Check if some node is dead.
  */
-const hearthbeatCheckLogic = function (hearth, addresses) {
-  if (hearth.size <= 0) {
+const heartbeatCheckLogic = function (heart, addresses) {
+  if (heart.size <= 0) {
     log.debug('No other nodes in the ring')
     return
   }
-  log.debug('Doing an hearth check')
-  Rx.Observable.from(hearth)
+  log.debug('Doing an heart check')
+  Rx.Observable.from(heart)
     .filter(isNodeToRemove)
-    .map((entry, index) => removingNodes(entry, index, hearth, addresses))
+    .map((entry, index) => removingNodes(entry, index, heart, addresses))
     .subscribe()
 }
 
 /**
  * Start a periodic check to see if any node should be removed from the cluster.
- * @param {Map} hearth
+ * @param {Map} heart
  * @param {Array} addresses
  */
-const hearthbeatCheck = function (hearth, addresses) {
+const heartbeatCheck = function (heart, addresses) {
   setInterval(
-    () => hearthbeatCheckLogic(hearth, addresses),
-    hearthbeatCheckFrequency
+    () => heartbeatCheckLogic(heart, addresses),
+    heartbeatCheckFrequency
   )
 }
 
@@ -56,7 +56,7 @@ const isNodeToRemove = entry => {
  * @param {map entry} entry
  * @param {* index into the map} index
  */
-const removingNodes = (entry, index, hearth, addresses) => {
+const removingNodes = (entry, index, heart, addresses) => {
   const removeFromHeart = []
   log.info('Removing a node')
   // time expired , clean up maps.
@@ -69,8 +69,8 @@ const removingNodes = (entry, index, hearth, addresses) => {
   }
   util.broadcastMessage(addresses, { type: NODE_REMOVED, msg: addresses })
   removeFromHeart.forEach(e => {
-    hearth.delete(e)
+    heart.delete(e)
   })
 }
 
-module.exports = hearthbeatCheck
+module.exports = heartbeatCheck
