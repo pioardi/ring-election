@@ -87,7 +87,7 @@ In modern systems it is often needed to distribute the application load to make 
 Ring-election is a driver that implements a distributed algorithm that assigns to each node the partitions to work on .
 In a simple use case each node can obtain data that are part of the partitions of which it is owner and work on them. <br>
 The algorithm will assign to each node one or more partitions to work with.<br>
-A node will be removed if it does not send an hearth beat for a while , this process is called heart check.<br>
+A node will be removed if it does not send an heart beat for a while , this process is called heart check.<br>
 Each node in the ring will have an ID and a priority , if the leader node will die the node with lower priority will be elect as leader. <br>
 If a node is added or removed from the cluster, the allocated partitions will be rebalanced.
 
@@ -130,8 +130,8 @@ A real implementation of this use case is available here https://github.com/pioa
 <h2 id="config"> Configuration </h2>
  <strong>PORT</strong> : The leader will start to listen on this port , default is 3000 <br>
   <strong>TIME_TO_RECONNECT</strong>: The time to wait for a follower when he has to connect to a new leader in ms , default is 3000ms <br>
-  <strong>HEARTH_BEAT_FREQUENCY</strong>: The frequency with which a hearth beat is performed by a follower , default is 1000ms <br>
-  <strong>HEARTH_BEAT_CHECK_FREQUENCY</strong>: The frequency with which an hearth check is performed by a leader , default is 3000ms <br>
+  <strong>HEART_BEAT_FREQUENCY</strong>: The frequency with which a heart beat is performed by a follower , default is 1000ms <br>
+  <strong>HEART_BEAT_CHECK_FREQUENCY</strong>: The frequency with which an heart check is performed by a leader , default is 3000ms <br>
   <strong>LOG_LEVEL</strong>: Follow this https://www.npmjs.com/package/winston#logging-levels , default is info.<br>
   <strong>NUM_PARTITIONS</strong>: Number of partitions to distribute across the cluster , default is 10. <br>
   <strong>SEED_NODES</strong> : hostnames and ports of leader node comma separated, Ex . hostname1:port,hostname2:port <br>
@@ -143,33 +143,19 @@ To monitor your cluster contact any node on the path /status (HTTP verb :  GET) 
 
 <h2 id="todo">TODO List </h2>
 
-Re-add a client in the cluster when it was removed and send an hearth beat<br>
+Re-add a client in the cluster when it was removed and send an heart beat<br>
 Implement event emitter to notify library users when something happens
 <h2 id="hld">High Level Diagram</h2>
 
-![Dynamic diagram](doc/Ring.jpg)
-
+See <a href="https://github.com/pioardi/ring-election/wiki/How-work-under-the-hood">wiki</a> page.
 
 <h2 id="contribute">How to contribute</h2>
-This repo use standard js style , please use it if you want to contribute <br>
-Take tasks from todo list, develop a new feature or fix a bug and do a pull request.<br>
-<strong>How to run tests</strong><br>
-<strong>Unit tests </strong> <br>
-npm run test <br><br>
-<strong>Integration tests</strong><br>
-cd  test/integration <br>
-./integration.sh <br>
-npm run integration-test<br> <br>
-<strong> How to check if your new code is standard style </strong><br>
-npm run standard <br> 
-If you want to lint your code run --> npm run lint
 
-
-
+See contributing guidelines [CONTRIBUTING](./CONTRIBUTING.md)
 
 
 <h2 id="versioning">Versioning</h2>
 We use (http://semver.org/) for versioning.
 
 <h2 id="license">License</h2>
-This project is licensed under the MIT License - see the [LICENSE.md] file for details
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details
