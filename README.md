@@ -72,17 +72,16 @@ ring.follower.eventListener.on(PARTITIONS_ASSIGNED , (newAssignedPartitions) => 
 ```
 
 
-<strong>Try this to better understand the behaviour</strong>
+<strong>Start your development cluster</strong><br>
 
-```bash
-  docker-compose up
-```
+You will find some helpful files into the dev folder , please see the following video <br>
+
+![](doc/dev.gif)
 
 Check assigned partitions to local:9000/status or change the port to 9001/9002 <br>
 
 
-Try to stop and restart container and observe the behaviour.<br>
-If you want to develop new features or fix a bug you can do that without docker images , just configure environment variables correctly ( you can see them on [docker-compose.yaml] file) . <br>
+Try to stop and restart processes and observe the behaviour.<br>
 <h2 id="overview">Overview and rationale</h2>
 In modern systems it is often needed to distribute the application load to make the system scalable so that every data is processed by a single instance. <br>
 Ring-election is a driver that implements a distributed algorithm that assigns to each node the partitions to work on .
