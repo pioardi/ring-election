@@ -35,7 +35,7 @@
   <a href="#versioning">Versioning</a>
   <span> · </span>
   <a href="#license">License</a>
-
+</h3>
 
 <strong>What the ring-election driver offers you ?</strong><br>
 
