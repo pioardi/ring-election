@@ -1,4 +1,4 @@
-# Ring election
+# Ring election :sparkles:  :dizzy:
 
 <strong>Is your dream to build a service like cassandra,kafka,zipkin,jaeger,redis,etc...? You are in the right place , join ring-election project !!! </strong> <br>
 
@@ -14,21 +14,43 @@
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ring-election)<br>
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-
-
-
 <h2>Contents </h2>
-<a href="#gs">Getting started</a><br>
-<a href="#overview">Overview</a><br>
-<a href="#usecases">Use cases</a><br>
-<a href="#config">Config</a><br>
-<a href="#monitoring">Monitoring</a><br>
-<a href="#todo">Vision</a><br>
-<a href="#hld">High level design</a><br>
-<a href="#contribute">Contribute</a><br>
-<a href="#versioning">Versioning</a><br>
-<a href="#license">License</a><br>
+<h3 align="center">
+  <a href="#gs">Getting started</a>
+  <span> · </span>
+  <a href="#overview">Overview</a>
+  <span> · </span>
+  <a href="#usecases">Use cases</a>
+  <span> · </span>
+  <a href="#config">Config</a>
+  <span> · </span>
+  <a href="#config">Config</a>
+  <span> · </span>
+  <a href="#monitoring">Monitoring</a>
+  <span> · </span>
+  <a href="#hld">High level design</a>
+  <span> · </span>
+  <a href="#contribute">Contribute</a>
+  <span> · </span>
+  <a href="#versioning">Versioning</a>
+  <span> · </span>
+  <a href="#license">License</a>
 
+
+<strong>What the ring-election driver offers you ?</strong><br>
+
+- A default partitioner that for an object returns the partition to which it is assigned.<br>
+- Mechanism of leader election<br>
+- Failure detection between nodes.<br>
+- Assignment and rebalancing of partitions between nodes<br>
+- Automatic re-election of the leader<br>
+- Listen for new assigned/revoked partitions <br>
+
+<strong>What problems can you solve with this driver ?</strong><br>
+- Scalability<br>
+- High availability<br>
+- Concurrency between nodes in a cluster<br>
+- Automatic failover<br>
 
 <h2 id="gs">Getting started</h2>
 <strong> Install with npm ! </strong>
@@ -92,19 +114,7 @@ A node will be removed if it does not send an heart beat for a while , this proc
 Each node in the ring will have an ID and a priority , if the leader node will die the node with lower priority will be elect as leader. <br>
 If a node is added or removed from the cluster, the allocated partitions will be rebalanced.
 
-<strong>What the ring-election driver offers you ?</strong><br>
 
-- A default partitioner that for an object returns the partition to which it is assigned.<br>
-- Mechanism of leader election<br>
-- Failure detection between nodes.<br>
-- Assignment and rebalancing of partitions between nodes<br>
-- Automatic re-election of the leader<br>
-
-<strong>What problems can you solve with this driver ?</strong><br>
-- Scalability<br>
-- High availability<br>
-- Concurrency between nodes in a cluster<br>
-- Automatic failover<br>
    
 <h2 id="usecases">Use cases</h2>
 
@@ -141,11 +151,6 @@ A real implementation of this use case is available here https://github.com/pioa
 <h2 id="monitoring"> Monitoring API </h2>
 To monitor your cluster contact any node on the path /status (HTTP verb :  GET) or contact a follower node on /partitions (HTTP verb :  GET). <br>
 
-
-<h2 id="todo">TODO List </h2>
-
-Re-add a client in the cluster when it was removed and send an heart beat<br>
-Implement event emitter to notify library users when something happens
 <h2 id="hld">High Level Diagram</h2>
 
 See <a href="https://github.com/pioardi/ring-election/wiki/How-work-under-the-hood">wiki</a> page.
