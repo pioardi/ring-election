@@ -8,10 +8,7 @@
 const log = require('./logger')
 const Rx = require('@reactivex/rxjs')
 /** max time to wait for an heartbeat(in ms) */
-const maxInactiveTime = process.env.MAX_INACTIVE_TIME || 10000
-/** frequency to check if nodes are alive(in ms) */
-const heartbeatCheckFrequency =
-  process.env.HEART_BEAT_CHECK_FREQUENCY || 3000
+const { maxInactiveTime, heartbeatCheckFrequency } = require('./config')
 const partitioner = require('./partitioner')
 const util = require('./util')
 const { NODE_REMOVED } = require('./constants')

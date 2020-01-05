@@ -7,7 +7,7 @@
 
 const HEART_BEAT = 'HEART_BEAT'
 // frequency to sent an heartbeat ( in ms )
-const heartbeatFrequency = process.env.HEART_BEAT_FREQUENCY || 1000
+const { heartbeatFrequency } = require('./config')
 const { MESSAGE_SEPARATOR } = require('./constants')
 
 /**

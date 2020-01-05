@@ -8,7 +8,7 @@
 const Rx = require('@reactivex/rxjs')
 const log = require('./logger')
 const util = require('./util')
-const numberOfPartitions = process.env.NUM_PARTITIONS || 10
+const { numPartitions: numberOfPartitions } = require('./config')
 
 /**
  * Default Partitioner is a round robin algorithm
@@ -84,7 +84,6 @@ function updateServers (
  */
 const assignPartitions = (client, addresses) => {
   const partitionsAssigned = []
-  const numberOfPartitions = process.env.NUM_PARTITIONS || 10
   const numberOfNodes = addresses.length
   const partitionsToAssign = Math.round(numberOfPartitions / (numberOfNodes + 1))
   const partitionsToRevokeForEachNode = Math.round(

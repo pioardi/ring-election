@@ -15,7 +15,7 @@ Please ask your PR to be merged on <strong>develop</strong> branch . <br>
   npm run test
 ```
 <br>
-Unit test coverage must be greater than 97%
+Unit test coverage must be greater than 99%.
 
 <strong>Integration tests</strong><br>
 

@@ -10,6 +10,7 @@ const os = require('os')
 const hostname = os.hostname()
 const log = require('./logger')
 const eventEmitter = require('./eventEmitter')
+const { timeToReconnect, monitoringPort, timeToBecomeSeed } = require('./config')
 let monitor
 let leaderConnected
 // --------------------- CONFIG --------------------
@@ -52,7 +53,7 @@ const seedNodes = process.env.SEED_NODES ? process.env.SEED_NODES.split(',') : [
  * If there is no leader available , this function will start a server.
  * @returns the client if created , else undefined.
  */
-const createClient = () => {
+const start = () => {
   const seedNode = detectSeedNode()
 
   if (!seedNode) {
@@ -105,6 +106,16 @@ function detectSeedNode () {
 // --------------------- CORE ---------------------
 
 // --------------------- MESSAGING ---------------------
+
+/**
+ * Method to send data across the cluster
+ * @param {*Any} data , data to send to other followers via socket
+ * @param {*} replication , the replication factor desired for this data, you can choose a number or LOCAL_QUORUM_REPLICATION,QUORUM_REPLICATION,TOTAL_REPLICATION
+ * @since 2.0.0
+ */
+const sendData = (data, replication) => {
+  // TODO implement
+}
 
 const peerMessageHandler = (data, client) => {
   const stringData = data.toString()
@@ -179,7 +190,7 @@ const seedNodeReconnection = () => {
     .subscribe(
       e => {
         log.info(`Find vice seed node with address ${e.hostname}`)
-        setTimeout(createClient, process.env.TIME_TO_RECONNECT || 3000)
+        setTimeout(start, timeToReconnect)
       },
       error => log.error(error),
       () => log.info('Reconnected to seed node')
@@ -201,7 +212,7 @@ const seedEndEvent = (client, err) => {
     )
     assignedPartitions = []
 
-    setTimeout(startAsLeader, process.env.TIME_TO_BECOME_SEED || 1000)
+    setTimeout(startAsLeader, timeToBecomeSeed)
   } else {
     seedNodeReconnection()
   }
@@ -214,7 +225,7 @@ const seedEndEvent = (client, err) => {
  */
 const seedErrorEvent = (client, e) => {
   log.error(JSON.stringify(e))
-  createClient()
+  start()
 }
 
 // --------------------- MESSAGING ---------------------
@@ -259,16 +270,16 @@ app.get('/partitions', (req, res) => {
  * Start an express server to monitor the cluster.
  */
 const startMonitoring = () => {
-  const port = process.env.MONITORING_PORT || 9000
-  monitor = app.listen(port)
-  log.info(`Server is monitorable at the port ${port}`)
+  monitor = app.listen(monitoringPort)
+  log.info(`Server is monitorable at the port ${monitoringPort}`)
 }
 
 module.exports = {
-  createClient: createClient,
+  start: start,
   defaultPartitioner: require('./partitioner').defaultPartitioner,
   ring: ringInfo,
   startMonitoring: startMonitoring,
   partitions: partitions,
-  eventListener: eventEmitter
+  eventListener: eventEmitter,
+  sendData: sendData
 }

@@ -8,7 +8,7 @@
 const partitioner = require('./partitioner')
 // --------------------- CONFIG ---------------------
 const log = require('./logger')
-const peerPort = process.env.PORT || 3000
+const { port: peerPort, monitoringPort } = require('./config')
 const os = require('os')
 const hostname = os.hostname()
 // --------------------- CONFIG ---------------------
@@ -152,9 +152,8 @@ app.get('/status', (req, res) => {
 })
 
 const startMonitoring = () => {
-  const port = process.env.MONITORING_PORT || 9000
-  app.listen(port)
-  log.info(`Server is monitorable at the port ${port}`)
+  app.listen(monitoringPort)
+  log.info(`Server is monitorable at the port ${monitoringPort}`)
 }
 
 module.exports = {

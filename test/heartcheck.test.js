@@ -6,6 +6,7 @@ const mock = require('mock-require')
 describe('Heart check', () => {
   it('Should be ok if no nodes are present in the ring', done => {
     let count = 0
+    mock.reRequire('../ring/config')
     mock.reRequire('../ring/logger')
     mock('../ring/logger', {
       debug: () => {
@@ -24,6 +25,7 @@ describe('Heart check', () => {
   it('Should do an heart check with correct frequency and remove nodes if needed', done => {
     let count = 0
     mock.stopAll()
+    mock.reRequire('../ring/config')
     mock('../ring/partitioner', {
       rebalancePartitions: () => {
         count++

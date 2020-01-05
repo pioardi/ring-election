@@ -7,10 +7,11 @@
  */
 'use strict'
 const winston = require('winston')
+const { nodeEnv, logLevel } = require('./config')
 const { timestamp, combine, json } = winston.format
 
 const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
+  level: logLevel,
   format: combine(timestamp(), json()),
   transports: [
     // - Write to all logs with level `info` and below to `combined.log`
@@ -24,7 +25,7 @@ const logger = winston.createLogger({
 })
 
 // if in dev environment , log to console.
-if (process.env.NODE_ENV === 'dev') {
+if (nodeEnv === 'dev') {
   logger.add(
     new winston.transports.Console({
       format: combine(json(), timestamp())
