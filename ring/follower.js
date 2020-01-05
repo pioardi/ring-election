@@ -6,16 +6,13 @@
 'use strict'
 
 // --------------------- CONFIG ---------------------
-/* This config is helpful for development and test ,in production
- * will be used environment variables
- */
 const os = require('os')
 const hostname = os.hostname()
 const log = require('./logger')
 const eventEmitter = require('./eventEmitter')
 let monitor
 let leaderConnected
-// --------------------- CONFIG ---------------------
+// --------------------- CONFIG --------------------
 
 const net = require('net')
 const heartbeat = require('./heartbeat')
@@ -50,6 +47,11 @@ let addresses
 // --------------------- CORE ---------------------
 const seedNodes = process.env.SEED_NODES ? process.env.SEED_NODES.split(',') : ['localhost']
 
+/**
+ * Create a socket client to connect the follower to the leader.
+ * If there is no leader available , this function will start a server.
+ * @returns the client if created , else undefined.
+ */
 const createClient = () => {
   const seedNode = detectSeedNode()
 
@@ -77,6 +79,7 @@ const createClient = () => {
   client.on('error', e => seedErrorEvent(client, e))
   client.on('data', data => peerMessageHandler(data, client))
   client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }))
+  return client
 }
 
 const startAsLeader = () => {
@@ -215,9 +218,15 @@ const seedErrorEvent = (client, e) => {
 }
 
 // --------------------- MESSAGING ---------------------
+/**
+ * @returns all the ring info , including leader
+ */
 const ringInfo = () => {
   return addresses
 }
+/**
+ * @returns the assigned partitions for this follower
+ */
 const partitions = () => {
   return assignedPartitions
 }
@@ -246,6 +255,9 @@ app.get('/partitions', (req, res) => {
   res.send(partitions())
 })
 
+/**
+ * Start an express server to monitor the cluster.
+ */
 const startMonitoring = () => {
   const port = process.env.MONITORING_PORT || 9000
   monitor = app.listen(port)

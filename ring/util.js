@@ -25,7 +25,7 @@ const searchClient = (client, ds) => {
 }
 
 /**
- * Search a client by client Id.
+ * Search a client by client priority.
  * @param {*} priority the priority to search
  * @param {Array} ds an array
  * @returns the entry in the map.
