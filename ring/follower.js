@@ -79,7 +79,7 @@ const start = () => {
   // TIP: for now avoid to handle the on error event
   client.on('error', e => seedErrorEvent(client, e))
   client.on('data', data => peerMessageHandler(data, client))
-  client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }) + MESSAGE_SEPARATOR)
+  client.write(JSON.stringify({ type: HOSTNAME, msg: hostname }))
   return client
 }
 
