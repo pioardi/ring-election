@@ -11,5 +11,5 @@ docker image build -t pioardi/ring-election:1.0 .
 echo "\nDocker image built , start cluster..."
 docker-compose up -d
 echo "Waiting"
-sleep 15
+sleep 25
 npm run integration-test
