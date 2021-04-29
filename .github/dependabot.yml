@@ -1,0 +1,21 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: mocha
+    versions:
+    - ">= 6.a, < 7"
+  - dependency-name: "@reactivex/rxjs"
+    versions:
+    - ">= 6.4.a, < 6.5"
+  - dependency-name: "@reactivex/rxjs"
+    versions:
+    - ">= 6.a, < 7"
+  - dependency-name: mocha
+    versions:
+    - 8.2.1
+    - 8.3.1
